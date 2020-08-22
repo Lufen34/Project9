@@ -1,7 +1,11 @@
 package com.dummy.myerp.model.bean.comptabilite;
 
+import com.dummy.myerp.model.exceptions.EmptyStringException;
+import com.dummy.myerp.model.exceptions.StringSizeTooBigException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
-import java.util.Objects;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -10,6 +14,8 @@ import javax.validation.constraints.Size;
  * Bean représentant un Journal Comptable
  */
 public class JournalComptable {
+
+    Logger logger = LoggerFactory.getLogger(JournalComptable.class);
 
     // ==================== Attributs ====================
     /** code */
@@ -36,9 +42,9 @@ public class JournalComptable {
      * @param pCode the p code
      * @param pLibelle the p libelle
      */
-    public JournalComptable(String pCode, String pLibelle) {
-        code = pCode;
-        libelle = pLibelle;
+    public JournalComptable(String pCode, String pLibelle) throws StringSizeTooBigException, EmptyStringException{
+        code = conformCodeValue(pCode);
+        libelle = conformLibelledValue(pLibelle);
     }
 
 
@@ -46,14 +52,14 @@ public class JournalComptable {
     public String getCode() {
         return code;
     }
-    public void setCode(String pCode) {
-        code = pCode;
+    public void setCode(String pCode) throws StringSizeTooBigException, EmptyStringException {
+            code = conformCodeValue(pCode);
     }
     public String getLibelle() {
         return libelle;
     }
-    public void setLibelle(String pLibelle) {
-        libelle = pLibelle;
+    public void setLibelle(String pLibelle) throws EmptyStringException, StringSizeTooBigException {
+        libelle = conformLibelledValue(pLibelle);
     }
 
 
@@ -69,6 +75,17 @@ public class JournalComptable {
         return vStB.toString();
     }
 
+    private String conformCodeValue(String code) throws StringSizeTooBigException, EmptyStringException {
+        if (code.length() > 5) throw  new StringSizeTooBigException("Code length is superior to 5 value.");
+        else if (code.length() <= 0) throw  new EmptyStringException("Code length is empty ensure that you have at least 1 character.");
+        return code;
+    }
+
+    private String conformLibelledValue(String libelle) throws StringSizeTooBigException, EmptyStringException {
+        if (libelle.length() > 150) throw  new StringSizeTooBigException("libelle length is superior to max length(150).");
+        else if (libelle.length() <= 0) throw  new EmptyStringException("libelle length is empty ensure that you have at least 1 character.");
+        return libelle;
+    }
 
     // ==================== Méthodes STATIC ====================
     /**
@@ -81,11 +98,12 @@ public class JournalComptable {
     public static JournalComptable getByCode(List<? extends JournalComptable> pList, String pCode) {
         JournalComptable vRetour = null;
         for (JournalComptable vBean : pList) {
-            if (vBean != null && Objects.equals(vBean.getCode(), pCode)) {
+            if (vBean != null && (vBean.getCode().equals(pCode))) {
                 vRetour = vBean;
                 break;
             }
         }
         return vRetour;
     }
+
 }
