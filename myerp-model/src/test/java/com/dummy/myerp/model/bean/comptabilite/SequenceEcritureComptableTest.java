@@ -60,9 +60,20 @@ class SequenceEcritureComptableTest {
 
     @Test
     void getDerniereValeur() {
+        assertThat(actualSequence.getDerniereValeur()).isEqualTo(300);
+        try {
+            actualSequence = new SequenceEcritureComptable(2019, 565);
+        } catch (InvalidYearException e) {
+            e.printStackTrace();
+        }
+        assertThat(actualSequence.getDerniereValeur()).isEqualTo(565);
+
     }
 
-    @Test
-    void setDerniereValeur() {
+    @ParameterizedTest
+    @ValueSource(ints = {3569, 2247, 2113, 2100})
+    void setDerniereValeur(int arg) {
+        actualSequence.setDerniereValeur(arg);
+        assertThat(actualSequence.getDerniereValeur()).isEqualTo(arg);
     }
 }
