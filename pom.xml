@@ -420,36 +420,29 @@
                 </reportSets>
             </plugin>
 
-            <!-- ===== Création du rapport des tests unitaires (JUnit) ===== -->
+            <!-- ===== Création du rapport du code coverage ===== -->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version>
-                <reportSets>
-                    <!-- reportSet par défaut, exécuté dans tous les modules (non-aggregate reports) -->
-                    <reportSet>
-                        <reports>
-                            <!-- goal "report-only" afin de ne pas relancer les tests unitaires
-                                 car normalement ils ont été lancés par la phase compile -->
-                            <report>report-only</report>
-                        </reports>
-                    </reportSet>
-                    <reportSet>
-                        <!-- reportSet d'agrégation des rapports des sous-modules -->
-                        <id>aggregate</id>
-                        <!-- don't run aggregate in child modules -->
-                        <inherited>false</inherited>
-                        <reports>
-                            <!-- goal "report-only" afin de ne pas relancer les tests unitaires
-                                 car normalement ils ont été lancés par la phase compile -->
-                            <report>report-only</report>
-                        </reports>
-                        <configuration>
-                            <aggregate>true</aggregate>
-                        </configuration>
-                    </reportSet>
-                </reportSets>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.5</version>
+                <configuration>
+                    <destFile>${project.basedir}/../target/jacoco.exec</destFile>
+                    <append>true</append>
+                </configuration>
             </plugin>
+
+            <!-- ===== Création du rapport des tests unitaires (JUnit) ===== -->
+
+
+
+
+
+
+
+
+
+
+
 
             <!-- ===== Génération de la Javadoc ===== -->
             <plugin>
