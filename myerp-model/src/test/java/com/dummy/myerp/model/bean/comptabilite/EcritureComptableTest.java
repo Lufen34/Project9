@@ -19,7 +19,7 @@ public class EcritureComptableTest {
 
     @BeforeEach
     public void initTests() {
-        vEcriture = new EcritureComptable();
+        vEcriture = new EcritureComptable.Builder().build();
     }
 
    @AfterEach
@@ -156,7 +156,7 @@ public class EcritureComptableTest {
         vEcriture.getListLigneEcriture().add(this.createLigne(1, "100", null));
         assertThat(vEcriture.getTotalDebit()).isEqualTo("700");
 
-        vEcriture = new EcritureComptable();
+        vEcriture = new EcritureComptable.Builder().build();
         vEcriture.getListLigneEcriture().add(this.createLigne(1, "-200", null));
         vEcriture.getListLigneEcriture().add(this.createLigne(1, "-400", null));
         vEcriture.getListLigneEcriture().add(this.createLigne(1, "-300", null));
@@ -170,7 +170,7 @@ public class EcritureComptableTest {
         vEcriture.getListLigneEcriture().add(this.createLigne(1, null, "100"));
         assertThat(vEcriture.getTotalCredit()).isEqualTo("700");
 
-        vEcriture = new EcritureComptable();
+        vEcriture = new EcritureComptable.Builder().build();
         vEcriture.getListLigneEcriture().add(this.createLigne(1, null, "-200"));
         vEcriture.getListLigneEcriture().add(this.createLigne(1, null, "-400"));
         vEcriture.getListLigneEcriture().add(this.createLigne(1, null, "-100"));

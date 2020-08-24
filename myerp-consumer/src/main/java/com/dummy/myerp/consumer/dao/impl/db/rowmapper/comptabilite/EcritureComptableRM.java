@@ -20,12 +20,13 @@ public class EcritureComptableRM implements RowMapper<EcritureComptable> {
 
     @Override
     public EcritureComptable mapRow(ResultSet pRS, int pRowNum) throws SQLException {
-        EcritureComptable vBean = new EcritureComptable();
-        vBean.setId(pRS.getInt("id"));
-        vBean.setJournal(journalComptableDaoCache.getByCode(pRS.getString("journal_code")));
-        vBean.setReference(pRS.getString("reference"));
-        vBean.setDate(pRS.getDate("date"));
-        vBean.setLibelle(pRS.getString("libelle"));
+        EcritureComptable vBean = new EcritureComptable.Builder()
+                .Id(pRS.getInt("id"))
+                .journal(journalComptableDaoCache.getByCode(pRS.getString("journal_code")))
+                .reference(pRS.getString("reference"))
+                .date(pRS.getDate("date"))
+                .libelle(pRS.getString("libelle"))
+                .build();
 
         // Chargement des lignes d'écriture
         ConsumerHelper.getDaoProxy().getComptabiliteDao().loadListLigneEcriture(vBean);

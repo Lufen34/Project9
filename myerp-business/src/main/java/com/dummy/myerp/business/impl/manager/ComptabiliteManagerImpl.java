@@ -8,6 +8,8 @@ import javax.validation.ConstraintViolationException;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.TransactionStatus;
 import com.dummy.myerp.business.contrat.manager.ComptabiliteManager;
 import com.dummy.myerp.business.impl.AbstractBusinessManager;
@@ -25,7 +27,7 @@ import com.dummy.myerp.technical.exception.NotFoundException;
 public class ComptabiliteManagerImpl extends AbstractBusinessManager implements ComptabiliteManager {
 
     // ==================== Attributs ====================
-
+    private Logger logger = LoggerFactory.getLogger(ComptabiliteManagerImpl.class);
 
     // ==================== Constructeurs ====================
     /**
@@ -123,7 +125,8 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
                 vNbrDebit++;
             }
         }
-        // On test le nombre de lignes car si l'écriture à une seule ligne
+        // TODO ===== créé un test
+        // ===== RG_Compta_4 : On test le nombre de lignes car si l'écriture à une seule ligne
         //      avec un montant au débit et un montant au crédit ce n'est pas valable
         if (pEcritureComptable.getListLigneEcriture().size() < 2
             || vNbrCredit < 1
@@ -134,6 +137,9 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
 
         // TODO ===== RG_Compta_5 : Format et contenu de la référence
         // vérifier que l'année dans la référence correspond bien à la date de l'écriture, idem pour le code journal...
+        logger.error(pEcritureComptable.getReference());
+        logger.error(pEcritureComptable.getDate().toString());
+        //if (pEcritureComptable.getReference().equals())
     }
 
 

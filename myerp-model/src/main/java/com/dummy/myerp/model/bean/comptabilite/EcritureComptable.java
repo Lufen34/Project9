@@ -43,6 +43,65 @@ public class EcritureComptable {
     @Size(min = 2)
     private final List<LigneEcritureComptable> listLigneEcriture = new ArrayList<>();
 
+    // ==================== Constructeur ====================
+    private EcritureComptable(Builder builder) {
+        id = builder.id;
+        journal = builder.journal;
+        reference = builder.reference;
+        date = builder.date;
+        libelle = builder.libelle;
+    }
+
+    // ==================== Builder ====================
+    public static class Builder {
+
+        /** The Id. */
+        private Integer id;
+
+        /** Journal comptable */
+        @NotNull private JournalComptable journal;
+
+        /** The Reference. */
+        @Pattern(regexp = "\\d{1,5}-\\d{4}/\\d{5}")
+        private String reference;
+
+        /** The Date. */
+        @NotNull private Date date;
+
+        /** The Libelle. */
+        @NotNull
+        @Size(min = 1, max = 200)
+        private String libelle;
+
+        public Builder Id(int value){
+            id = value;
+            return this;
+        }
+
+        public Builder journal(JournalComptable value) {
+            journal = value;
+            return this;
+        }
+
+        public Builder reference(String value) {
+            reference = value;
+            return this;
+        }
+
+        public Builder date(Date value) {
+            date = value;
+            return this;
+        }
+
+        public Builder libelle(String value) {
+            libelle = value;
+            return this;
+        }
+
+        public EcritureComptable build() {
+            return new EcritureComptable(this);
+        }
+    }
 
     // ==================== Getters/Setters ====================
     public Integer getId() {
