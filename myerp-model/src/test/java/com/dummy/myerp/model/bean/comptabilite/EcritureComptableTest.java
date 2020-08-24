@@ -2,9 +2,12 @@ package com.dummy.myerp.model.bean.comptabilite;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import com.dummy.myerp.model.exceptions.EmptyStringException;
+import com.dummy.myerp.model.exceptions.StringSizeTooBigException;
 import org.apache.commons.lang3.ObjectUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +22,22 @@ public class EcritureComptableTest {
 
     @BeforeEach
     public void initTests() {
-        vEcriture = new EcritureComptable.Builder().build();
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(1996, 1, 1);
+
+        Date dateTest = calendar.getTime();
+
+        try {
+            vEcriture = new EcritureComptable.Builder()
+                    .Id(1)
+                    .date(dateTest)
+                    .journal(new JournalComptable("AC", "test"))
+                    .build();
+        } catch (StringSizeTooBigException e) {
+            e.printStackTrace();
+        } catch (EmptyStringException e) {
+            e.printStackTrace();
+        }
     }
 
    @AfterEach
@@ -97,14 +115,7 @@ public class EcritureComptableTest {
 
     @Test
     void getReference() {
-        vEcriture.setReference("test");
-        assertThat(vEcriture.getReference()).isEqualTo("test");
-    }
-
-    @Test
-    void setReference() {
-        vEcriture.setReference("test");
-        assertThat(vEcriture.getReference()).isEqualTo("test");
+        assertThat(vEcriture.getReference()).isEqualTo("AC-1996/00001");
     }
 
     @Test

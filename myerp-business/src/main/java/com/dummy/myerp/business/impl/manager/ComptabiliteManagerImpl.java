@@ -98,9 +98,8 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
      * @param pEcritureComptable -
      * @throws FunctionalException Si l'Ecriture comptable ne respecte pas les règles de gestion
      */
-    // TODO tests à compléter
     protected void checkEcritureComptableUnit(EcritureComptable pEcritureComptable) throws FunctionalException {
-        // ===== Vérification des contraintes unitaires sur les attributs de l'écriture
+        // ===== RG_Compta_1 : Vérification des contraintes unitaires sur les attributs de l'écriture
         Set<ConstraintViolation<EcritureComptable>> vViolations = getConstraintValidator().validate(pEcritureComptable);
         if (!vViolations.isEmpty()) {
             throw new FunctionalException("L'écriture comptable ne respecte pas les règles de gestion.",
@@ -135,18 +134,15 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
                 "L'écriture comptable doit avoir au moins deux lignes : une ligne au débit et une ligne au crédit.");
         }
 
-        // TODO ===== RG_Compta_5 : Format et contenu de la référence
-        // vérifier que l'année dans la référence correspond bien à la date de l'écriture, idem pour le code journal...
-        logger.error(pEcritureComptable.getReference());
-        logger.error(pEcritureComptable.getDate().toString());
-        //if (pEcritureComptable.getReference().equals())
+        // ===== RG_Compta_5 : Format et contenu de la référence
+        // La date de l'ecriture et la date de la reference doivent correspondre.
         Calendar dateEcriture = Calendar.getInstance();
         dateEcriture.setTime(pEcritureComptable.getDate());
         String yearFromRef = "";
-        System.out.println(pEcritureComptable.getReference());
         for (int i = 0; i < pEcritureComptable.getReference().length(); i++) {
             if (pEcritureComptable.getReference().charAt(i) == '-') {
                 yearFromRef = pEcritureComptable.getReference().substring(i+1, i+5);
+                break;
             }
         }
         if (dateEcriture.get(Calendar.YEAR) != Integer.parseInt(yearFromRef))

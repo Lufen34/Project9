@@ -130,9 +130,12 @@ public class EcritureComptable {
                 .append(String.format("%05d", id));
         return sb.toString();
     }
-    public void setReference(String pReference) {
+
+    /* TODO Parler avec le mentor au sujet de la référence si j'ai le droit d'empêcher un utilisateur de l'utiliser
+        référence : checkEcritureComptableUnitRG5() de la class  @ComptabiliteManagerImplTest */
+    /*public void setReference(String pReference) {
         reference = pReference;
-    }
+    }*/
     public Date getDate() {
         return date;
     }
