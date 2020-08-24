@@ -53,6 +53,7 @@
         <!-- ===== Version properties ===== -->
         <log4j.version>2.13.3</log4j.version>
         <spring.version>5.2.8.RELEASE</spring.version>
+
     </properties>
 
 
@@ -421,7 +422,7 @@
             </plugin>
 
             <!-- ===== Création du rapport du code coverage ===== -->
-            <plugin>
+            <!-- <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.5</version>
@@ -429,7 +430,7 @@
                     <destFile>${project.basedir}/../target/jacoco.exec</destFile>
                     <append>true</append>
                 </configuration>
-            </plugin>
+            </plugin>-->
 
             <!-- ===== Création du rapport des tests unitaires (JUnit) ===== -->
 
