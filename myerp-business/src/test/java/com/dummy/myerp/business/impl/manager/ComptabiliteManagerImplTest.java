@@ -10,11 +10,14 @@ import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
 import com.dummy.myerp.model.bean.comptabilite.LigneEcritureComptable;
 import com.dummy.myerp.technical.exception.FunctionalException;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import javax.validation.ConstraintViolationException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
@@ -26,10 +29,7 @@ public class ComptabiliteManagerImplTest {
     @Test
     public void checkEcritureComptableUnit() throws Exception {
         EcritureComptable vEcritureComptable;
-        /*vEcritureComptable = new EcritureComptable();
-        vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
-        vEcritureComptable.setDate(new Date());
-        vEcritureComptable.setLibelle("Libelle");*/
+
         vEcritureComptable = new EcritureComptable.Builder()
                 .journal(new JournalComptable("AC", "Achat"))
                 .date(new Date())
@@ -74,11 +74,12 @@ public class ComptabiliteManagerImplTest {
 
     @Test
     public void checkEcritureComptableUnitRG3() throws Exception {
-        EcritureComptable vEcritureComptable;
-        vEcritureComptable = new EcritureComptable.Builder().build();
-        vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
-        vEcritureComptable.setDate(new Date());
-        vEcritureComptable.setLibelle("Libelle");
+        EcritureComptable vEcritureComptable = new EcritureComptable.Builder()
+                .journal(new JournalComptable("AC", "Achat"))
+                .date(new Date())
+                .libelle("Libelle")
+                .build();
+
         vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
                                                                                  null, new BigDecimal(123),
                                                                                  null));
@@ -92,12 +93,32 @@ public class ComptabiliteManagerImplTest {
 
 
     @Test
+    public void checkEcritureComptableUnitRG4() throws Exception {
+        EcritureComptable vEcritureComptable = new EcritureComptable.Builder()
+                .journal(new JournalComptable("AC", "Achat"))
+                .date(new Date())
+                .libelle("Libelle")
+                .build();
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
+                null, new BigDecimal(-400),
+                new BigDecimal(-300)));
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
+                null, new BigDecimal(-0),
+                new BigDecimal(-100)));
+        assertDoesNotThrow(()-> {
+           manager.checkEcritureComptableUnit(vEcritureComptable);
+        });
+    }
+
+    @Test
     public void checkEcritureComptableUnitRG5()throws Exception {
-        EcritureComptable vEcritureComptable;
-        vEcritureComptable = new EcritureComptable.Builder().build();
-        vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
-        vEcritureComptable.setDate(new Date());
-        vEcritureComptable.setLibelle("Libelle");
+        EcritureComptable vEcritureComptable = new EcritureComptable.Builder()
+                .journal(new JournalComptable("AC", "Achat"))
+                .date(new Date())
+                .libelle("Libelle")
+                .Id(22)
+                .build();
+
         vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
                 null, new BigDecimal(123),
                 new BigDecimal(123)));
@@ -105,6 +126,6 @@ public class ComptabiliteManagerImplTest {
                 null, new BigDecimal(123),
                 new BigDecimal(123)));
         manager.checkEcritureComptableUnit(vEcritureComptable);
-        fail("not implemented yet");
+
     }
 }

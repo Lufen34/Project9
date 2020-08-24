@@ -1,6 +1,8 @@
 package com.dummy.myerp.business.impl.manager;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
@@ -125,9 +127,7 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
                 vNbrDebit++;
             }
         }
-        // TODO ===== créé un test
-        // ===== RG_Compta_4 : On test le nombre de lignes car si l'écriture à une seule ligne
-        //      avec un montant au débit et un montant au crédit ce n'est pas valable
+
         if (pEcritureComptable.getListLigneEcriture().size() < 2
             || vNbrCredit < 1
             || vNbrDebit < 1) {
@@ -140,6 +140,18 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
         logger.error(pEcritureComptable.getReference());
         logger.error(pEcritureComptable.getDate().toString());
         //if (pEcritureComptable.getReference().equals())
+        Calendar dateEcriture = Calendar.getInstance();
+        dateEcriture.setTime(pEcritureComptable.getDate());
+        String yearFromRef = "";
+        System.out.println(pEcritureComptable.getReference());
+        for (int i = 0; i < pEcritureComptable.getReference().length(); i++) {
+            if (pEcritureComptable.getReference().charAt(i) == '-') {
+                yearFromRef = pEcritureComptable.getReference().substring(i+1, i+5);
+            }
+        }
+        if (dateEcriture.get(Calendar.YEAR) != Integer.parseInt(yearFromRef))
+            throw new FunctionalException("La date de l'ecriture et la date de la reference doivent correspondre.");
+
     }
 
 

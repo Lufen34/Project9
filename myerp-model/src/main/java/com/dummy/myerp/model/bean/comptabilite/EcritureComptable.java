@@ -3,6 +3,7 @@ package com.dummy.myerp.model.bean.comptabilite;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.validation.Valid;
@@ -117,7 +118,17 @@ public class EcritureComptable {
         journal = pJournal;
     }
     public String getReference() {
-        return reference;
+        StringBuilder sb = new StringBuilder();
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+
+        sb.append(journal.getCode())
+                .append('-')
+                .append(cal.get(Calendar.YEAR))
+                .append('/')
+                .append(String.format("%05d", id));
+        return sb.toString();
     }
     public void setReference(String pReference) {
         reference = pReference;
@@ -149,7 +160,6 @@ public class EcritureComptable {
             if (vLigneEcritureComptable.getDebit() != null) {
                 vRetour = vRetour.add(vLigneEcritureComptable.getDebit());
             }
-            //logger.warn("Value of vRetour = " + vRetour.toString());
         }
         return vRetour;
     }
@@ -165,7 +175,6 @@ public class EcritureComptable {
             if (vLigneEcritureComptable.getCredit() != null) {
                 vRetour = vRetour.add(vLigneEcritureComptable.getCredit());
             }
-            //logger.warn("Value of vRetour = " + vRetour.toString());
         }
         return vRetour;
     }
