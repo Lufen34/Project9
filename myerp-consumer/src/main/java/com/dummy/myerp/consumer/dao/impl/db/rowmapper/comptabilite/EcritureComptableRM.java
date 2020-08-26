@@ -33,4 +33,6 @@ public class EcritureComptableRM implements RowMapper<EcritureComptable> {
 
         return vBean;
     }
+
+
 }

@@ -11,6 +11,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import com.dummy.myerp.model.exceptions.EmptyStringException;
+import com.dummy.myerp.model.exceptions.StringSizeTooBigException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -131,11 +133,17 @@ public class EcritureComptable {
         return sb.toString();
     }
 
-    /* TODO Parler avec le mentor au sujet de la référence si j'ai le droit d'empêcher un utilisateur de l'utiliser
-        référence : checkEcritureComptableUnitRG5() de la class  @ComptabiliteManagerImplTest */
-    /*public void setReference(String pReference) {
-        reference = pReference;
-    }*/
+    public void setReference(String codeJournal, String libelleJournal, Date pDate, int pId) {
+        try {
+            journal = new JournalComptable(codeJournal, libelleJournal);
+        } catch (StringSizeTooBigException e) {
+            e.printStackTrace();
+        } catch (EmptyStringException e) {
+            e.printStackTrace();
+        }
+        date = pDate;
+        id = pId;
+    }
     public Date getDate() {
         return date;
     }

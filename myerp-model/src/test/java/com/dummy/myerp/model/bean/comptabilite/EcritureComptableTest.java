@@ -187,4 +187,10 @@ public class EcritureComptableTest {
         vEcriture.getListLigneEcriture().add(this.createLigne(1, null, "-100"));
         assertThat(vEcriture.getTotalCredit()).isEqualTo("-700");
     }
+
+    @Test
+    void setReference() {
+        vEcriture.setReference("AC", "test", new Date(), 3);
+        assertThat(vEcriture.getReference()).isEqualTo("AC-2020/00003");
+    }
 }
