@@ -31,7 +31,7 @@ public class EcritureComptable {
     /** Journal comptable */
     @NotNull private JournalComptable journal;
     /** The Reference. */
-    @Pattern(regexp = "\\d{1,5}-\\d{4}/\\d{5}")
+    @Pattern(regexp = "^.[A-Z]{2}-\\d{4}/\\d{5}")
     private String reference;
     /** The Date. */
     @NotNull private Date date;
@@ -65,7 +65,7 @@ public class EcritureComptable {
         @NotNull private JournalComptable journal;
 
         /** The Reference. */
-        @Pattern(regexp = "\\d{1,5}-\\d{4}/\\d{5}")
+        @Pattern(regexp = "^.[A-Z]{2}-\\d{4}/\\d{5}")
         private String reference;
 
         /** The Date. */
@@ -86,11 +86,6 @@ public class EcritureComptable {
             return this;
         }
 
-        public Builder reference(String value) {
-            reference = value;
-            return this;
-        }
-
         public Builder date(Date value) {
             date = value;
             return this;
@@ -102,6 +97,14 @@ public class EcritureComptable {
         }
 
         public EcritureComptable build() {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            StringBuilder sb = new StringBuilder();
+            sb.append(journal.getCode())
+                    .append('-')
+                    .append(cal.get(Calendar.YEAR))
+                    .append('/')
+                    .append(String.format("%05d", id));
             return new EcritureComptable(this);
         }
     }
@@ -120,17 +123,17 @@ public class EcritureComptable {
         journal = pJournal;
     }
     public String getReference() {
-        StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
 
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
 
-        sb.append(journal.getCode())
-                .append('-')
-                .append(cal.get(Calendar.YEAR))
-                .append('/')
-                .append(String.format("%05d", id));
-        return sb.toString();
+            sb.append(journal.getCode())
+                    .append('-')
+                    .append(cal.get(Calendar.YEAR))
+                    .append('/')
+                    .append(String.format("%05d", id));
+            return sb.toString();
     }
 
     public void setReference(String codeJournal, String libelleJournal, Date pDate, int pId) {

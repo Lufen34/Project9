@@ -8,6 +8,11 @@ import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
+import com.dummy.myerp.consumer.dao.contrat.ComptabiliteDao;
+import com.dummy.myerp.consumer.dao.contrat.DaoProxy;
+import com.dummy.myerp.consumer.dao.impl.db.dao.ComptabiliteDaoImpl;
+import com.dummy.myerp.model.bean.comptabilite.*;
+import com.dummy.myerp.model.exceptions.InvalidYearException;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -15,10 +20,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.transaction.TransactionStatus;
 import com.dummy.myerp.business.contrat.manager.ComptabiliteManager;
 import com.dummy.myerp.business.impl.AbstractBusinessManager;
-import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
-import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
-import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
-import com.dummy.myerp.model.bean.comptabilite.LigneEcritureComptable;
 import com.dummy.myerp.technical.exception.FunctionalException;
 import com.dummy.myerp.technical.exception.NotFoundException;
 
@@ -45,6 +46,15 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
         return getDaoProxy().getComptabiliteDao().getListCompteComptable();
     }
 
+    @Override
+    public List<SequenceEcritureComptable> getListSequenceEcritureComptable() {
+        return getDaoProxy().getComptabiliteDao().getListSequenceEcritureComptable();
+    }
+
+    @Override
+    public Integer getLastFromSpecificYearSequenceEcritureComptable(Integer pYear){
+        return getDaoProxy().getComptabiliteDao().getLastFromSpecificYearSequenceEcritureComptable(pYear);
+    }
 
     @Override
     public List<JournalComptable> getListJournalComptable() {
@@ -79,6 +89,33 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
                     (table sequence_ecriture_comptable)
          */
 
+        // TODO : Check Ecriture Comptable puis Update Ecriture Comptable
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(pEcritureComptable.getDate());
+        /* vérifie qu l'on a bien une valeur pour l'année concernée */
+        if (getLastFromSpecificYearSequenceEcritureComptable(cal.get(Calendar.YEAR)) != null){
+            SequenceEcritureComptable seq = null;
+            try {
+                /* On récupère la dernière valeur de la sequence pour l'année et rajoutons + 1 à derniere_valeur */
+                seq = new SequenceEcritureComptable(cal.get(Calendar.YEAR),
+                        getLastFromSpecificYearSequenceEcritureComptable(cal.get(Calendar.YEAR) + 1));
+            } catch (InvalidYearException e) {
+                    e.printStackTrace();
+            }
+            /* on insère l'entité de la sequence d'écriture dans la bdd */
+            getDaoProxy().getComptabiliteDao().insertSequenceEcritureComptable(seq);
+        }
+        /* Dans le cas où nous n'avons rien pour l'année concernée, nous créons une entité dans la table séquence. */
+        else {
+            SequenceEcritureComptable seq = null;
+            try {
+                /* On récupère la dernière valeur de la sequence pour l'année et rajoutons + 1 à derniere_valeur */
+                seq = new SequenceEcritureComptable(cal.get(Calendar.YEAR), 1);
+            } catch (InvalidYearException e) {
+                e.printStackTrace();
+            }
+            getDaoProxy().getComptabiliteDao().insertSequenceEcritureComptable(seq);
+        }
 
     }
 

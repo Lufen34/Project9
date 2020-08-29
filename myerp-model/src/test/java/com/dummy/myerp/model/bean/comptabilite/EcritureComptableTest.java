@@ -29,7 +29,7 @@ public class EcritureComptableTest {
 
         try {
             vEcriture = new EcritureComptable.Builder()
-                    .Id(1)
+                    .Id(123)
                     .date(dateTest)
                     .journal(new JournalComptable("AC", "test"))
                     .build();
@@ -115,7 +115,7 @@ public class EcritureComptableTest {
 
     @Test
     void getReference() {
-        assertThat(vEcriture.getReference()).isEqualTo("AC-1996/00001");
+        assertThat(vEcriture.getReference()).isEqualTo("AC-1996/00123");
     }
 
     @Test
@@ -166,12 +166,6 @@ public class EcritureComptableTest {
         vEcriture.getListLigneEcriture().add(this.createLigne(1, "400", null));
         vEcriture.getListLigneEcriture().add(this.createLigne(1, "100", null));
         assertThat(vEcriture.getTotalDebit()).isEqualTo("700");
-
-        vEcriture = new EcritureComptable.Builder().build();
-        vEcriture.getListLigneEcriture().add(this.createLigne(1, "-200", null));
-        vEcriture.getListLigneEcriture().add(this.createLigne(1, "-400", null));
-        vEcriture.getListLigneEcriture().add(this.createLigne(1, "-300", null));
-        assertThat(vEcriture.getTotalDebit()).isEqualTo("-900");
     }
 
     @Test
@@ -180,12 +174,6 @@ public class EcritureComptableTest {
         vEcriture.getListLigneEcriture().add(this.createLigne(1, null, "400"));
         vEcriture.getListLigneEcriture().add(this.createLigne(1, null, "100"));
         assertThat(vEcriture.getTotalCredit()).isEqualTo("700");
-
-        vEcriture = new EcritureComptable.Builder().build();
-        vEcriture.getListLigneEcriture().add(this.createLigne(1, null, "-200"));
-        vEcriture.getListLigneEcriture().add(this.createLigne(1, null, "-400"));
-        vEcriture.getListLigneEcriture().add(this.createLigne(1, null, "-100"));
-        assertThat(vEcriture.getTotalCredit()).isEqualTo("-700");
     }
 
     @Test

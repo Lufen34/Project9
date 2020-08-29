@@ -18,6 +18,7 @@ public class EcritureComptableRM implements RowMapper<EcritureComptable> {
     private final JournalComptableDaoCache journalComptableDaoCache = new JournalComptableDaoCache();
 
 
+    // TODO possiblement faut voir MPD pour comprendre.
     @Override
     public EcritureComptable mapRow(ResultSet pRS, int pRowNum) throws SQLException {
         EcritureComptable vBean = new EcritureComptable.Builder()

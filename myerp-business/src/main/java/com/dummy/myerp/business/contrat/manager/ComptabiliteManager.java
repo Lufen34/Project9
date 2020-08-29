@@ -5,6 +5,7 @@ import java.util.List;
 import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
 import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
 import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
+import com.dummy.myerp.model.bean.comptabilite.SequenceEcritureComptable;
 import com.dummy.myerp.technical.exception.FunctionalException;
 
 
@@ -28,6 +29,13 @@ public interface ComptabiliteManager {
      */
     List<JournalComptable> getListJournalComptable();
 
+
+    /**
+     * Renvoie la liste des sequences ecriture comptable.
+     *
+     * @return {@link List}
+     */
+    List<SequenceEcritureComptable> getListSequenceEcritureComptable();
 
     /**
      * Renvoie la liste des écritures comptables.
@@ -82,4 +90,12 @@ public interface ComptabiliteManager {
      * @param pId l'id de l'écriture
      */
     void deleteEcritureComptable(Integer pId);
+
+
+    /**
+     * Renvoie la derniere valeur de l'année saisie.
+     * @param pYear
+     * @return
+     */
+    Integer getLastFromSpecificYearSequenceEcritureComptable(Integer pYear);
 }
