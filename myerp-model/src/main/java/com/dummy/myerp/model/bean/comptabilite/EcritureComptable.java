@@ -13,6 +13,7 @@ import javax.validation.constraints.Size;
 
 import com.dummy.myerp.model.exceptions.EmptyStringException;
 import com.dummy.myerp.model.exceptions.StringSizeTooBigException;
+import com.dummy.myerp.technical.exception.FunctionalException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +32,7 @@ public class EcritureComptable {
     /** Journal comptable */
     @NotNull private JournalComptable journal;
     /** The Reference. */
-    @Pattern(regexp = "^.[A-Z]{2}-\\d{4}/\\d{5}")
+    @Pattern(regexp = "^[A-Z]{2}-\\d{4}/\\d{5}")
     private String reference;
     /** The Date. */
     @NotNull private Date date;
@@ -47,12 +48,13 @@ public class EcritureComptable {
     private final List<LigneEcritureComptable> listLigneEcriture = new ArrayList<>();
 
     // ==================== Constructeur ====================
-    private EcritureComptable(Builder builder) {
+    private EcritureComptable(Builder builder) throws FunctionalException {
         id = builder.id;
         journal = builder.journal;
-        reference = builder.reference;
         date = builder.date;
         libelle = builder.libelle;
+        /* Toujours créé la référence en dernier */
+        reference = getReference();
     }
 
     // ==================== Builder ====================
@@ -65,7 +67,8 @@ public class EcritureComptable {
         @NotNull private JournalComptable journal;
 
         /** The Reference. */
-        @Pattern(regexp = "^.[A-Z]{2}-\\d{4}/\\d{5}")
+        /* Indépendant de l'utilisateur */
+        @Pattern(regexp = "^[A-Z]{2}-\\d{4}/\\d{5}")
         private String reference;
 
         /** The Date. */
@@ -96,15 +99,23 @@ public class EcritureComptable {
             return this;
         }
 
-        public EcritureComptable build() {
+        public EcritureComptable build() throws FunctionalException {
             Calendar cal = Calendar.getInstance();
-            cal.setTime(date);
+            try {
+                cal.setTime(date);
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+                throw new FunctionalException("Please make sure that you entered a valid Date.");
+            }
+            if (journal == null)
+                throw new FunctionalException("Please ensure that the journal parameter is not null.");
             StringBuilder sb = new StringBuilder();
             sb.append(journal.getCode())
                     .append('-')
                     .append(cal.get(Calendar.YEAR))
                     .append('/')
                     .append(String.format("%05d", id));
+            reference = sb.toString();
             return new EcritureComptable(this);
         }
     }
@@ -127,7 +138,6 @@ public class EcritureComptable {
 
             Calendar cal = Calendar.getInstance();
             cal.setTime(date);
-
             sb.append(journal.getCode())
                     .append('-')
                     .append(cal.get(Calendar.YEAR))
@@ -146,6 +156,7 @@ public class EcritureComptable {
         }
         date = pDate;
         id = pId;
+        reference = getReference();
     }
     public Date getDate() {
         return date;

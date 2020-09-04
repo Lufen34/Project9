@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.dummy.myerp.model.exceptions.EmptyStringException;
 import com.dummy.myerp.model.exceptions.StringSizeTooBigException;
+import com.dummy.myerp.technical.exception.FunctionalException;
 import org.apache.commons.lang3.ObjectUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,6 +37,8 @@ public class EcritureComptableTest {
         } catch (StringSizeTooBigException e) {
             e.printStackTrace();
         } catch (EmptyStringException e) {
+            e.printStackTrace();
+        } catch (FunctionalException e) {
             e.printStackTrace();
         }
     }

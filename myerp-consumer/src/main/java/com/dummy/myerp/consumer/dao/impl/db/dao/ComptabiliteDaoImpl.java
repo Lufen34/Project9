@@ -311,10 +311,6 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
                 Integer.class);
 
         vJdbcTemplate.update(SQLinsertSequenceEcritureComptable, vSqlParams);
-
-        // comme l'update voir si j'ai besoin de faire le liens entre les autres ou non ?
-
-        // pas besoin car add reference va update lui meme ecriture comptable
     }
 
     private static String SQLgetLastFromSpecificYearSequenceEcritureComptable;

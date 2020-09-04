@@ -11,11 +11,13 @@ import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
 import com.dummy.myerp.model.bean.comptabilite.LigneEcritureComptable;
 import com.dummy.myerp.technical.exception.FunctionalException;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
-
+@ExtendWith(MockitoExtension.class)
 public class ComptabiliteManagerImplTest {
 
     private ComptabiliteManagerImpl manager = new ComptabiliteManagerImpl();
@@ -43,53 +45,53 @@ public class ComptabiliteManagerImplTest {
     }
 
     @Test
-    public void checkEcritureComptableUnit_Date() throws Exception {
-        EcritureComptable vEcritureComptable;
-
-        vEcritureComptable = new EcritureComptable.Builder()
-                .journal(new JournalComptable("AC", "Achat"))
-                .date(null)
-                .libelle("test")
-                .build();
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
-                null, new BigDecimal(123),
-                null));
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),
-                null, null,
-                new BigDecimal(123)));
+    public void checkEcritureComptableUnit_IsParamDateValid() throws Exception {
         assertThrows(FunctionalException.class, () -> {
-            manager.checkEcritureComptableUnit(vEcritureComptable);
+            EcritureComptable vEcritureComptable = new EcritureComptable.Builder()
+                    .journal(new JournalComptable("AC", "Achat"))
+                    .date(null)
+                    .libelle("test")
+                    .build();
         });
     }
 
     @Test
-    public void checkEcritureComptableUnit_Journal() throws Exception {
+    public void checkEcritureComptableUnit_CheckDateStandard() throws Exception {
         EcritureComptable vEcritureComptable;
 
         vEcritureComptable = new EcritureComptable.Builder()
-                .journal(null)
+                .journal(new JournalComptable("AC", "Achat"))
                 .date(new Date())
                 .libelle("test")
                 .build();
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
-                null, new BigDecimal(123),
-                null));
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),
-                null, null,
-                new BigDecimal(123)));
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(vEcritureComptable.getDate());
+        assertThat(cal.get(Calendar.YEAR)).isEqualTo(Integer.parseInt(vEcritureComptable.getReference().substring(3, 7)));
+    }
+
+    @Test
+    //TODO faire le test que Journal n'est pas vide (comme la Date)
+    public void checkEcritureComptableUnit_Journal() throws Exception {
         assertThrows(FunctionalException.class, () -> {
-            manager.checkEcritureComptableUnit(vEcritureComptable);
+            EcritureComptable vEcritureComptable = new EcritureComptable.Builder()
+                    .journal(null)
+                    .date(new Date())
+                    .libelle("test")
+                    .build();
         });
     }
 
     @Test
     public void checkEcritureComptableUnitViolation() throws Exception {
         EcritureComptable vEcritureComptable;
-        vEcritureComptable = new EcritureComptable.Builder().build();
+        vEcritureComptable = new EcritureComptable.Builder().date(new Date())
+                .journal(new JournalComptable("AC", "Des stylos pour gérard"))
+                .build();
         assertThrows(FunctionalException.class, ()-> {
             manager.checkEcritureComptableUnit(vEcritureComptable);
         });
     }
+
 
     @Test
     public void checkEcritureComptableUnitRG2() throws Exception {
@@ -133,48 +135,21 @@ public class ComptabiliteManagerImplTest {
     @Test
     public void checkEcritureComptableUnitRG4() throws Exception {
         EcritureComptable vEcritureComptable = new EcritureComptable.Builder()
+                .Id(1)
                 .journal(new JournalComptable("AC", "Achat"))
                 .date(new Date())
                 .libelle("Libelle")
                 .build();
         vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
-                null, new BigDecimal(123),
+                "test", new BigDecimal(123),
                 new BigDecimal(123)));
         vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),
-                null,  new BigDecimal(1234),
+                "test",  new BigDecimal(1234),
                 new BigDecimal(1234)));
         assertDoesNotThrow(()-> {
            manager.checkEcritureComptableUnit(vEcritureComptable);
         });
     }
-    // Ne peut pas planter grace à mon implémentation. Date et référence sont maintenant lié.
-    /*@Test
-    public void checkEcritureComptableUnitRG5_Error()throws Exception {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(1996, 1, 1);
-
-        Date dateTest = calendar.getTime();
-
-        System.out.println(dateTest.toString());
-
-        EcritureComptable vEcritureComptable = new EcritureComptable.Builder()
-                .journal(new JournalComptable("BQ", "Achat"))
-                .date(dateTest)
-                .libelle("Libelle")
-                .Id(22)
-                .build();
-
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
-                null, new BigDecimal(123),
-                new BigDecimal(123)));
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),
-                null,  new BigDecimal(1234),
-                new BigDecimal(1234)));
-
-        assertThrows(FunctionalException.class, ()-> {
-            manager.checkEcritureComptableUnit(vEcritureComptable);
-        });
-    }*/
 
     @Test
     public void checkEcritureComptableUnitRG5() throws Exception {
@@ -199,37 +174,46 @@ public class ComptabiliteManagerImplTest {
 
     @Test
     void getListCompteComptable() {
+        fail("not implemented yet");
     }
 
     @Test
     void getListJournalComptable() {
+        fail("not implemented yet");
     }
 
     @Test
     void getListEcritureComptable() {
+        fail("not implemented yet");
     }
 
     @Test
     void addReference() {
+        fail("not implemented yet");
     }
 
     @Test
     void checkEcritureComptable() {
+        fail("not implemented yet");
     }
 
     @Test
     void checkEcritureComptableContext() {
+        fail("not implemented yet");
     }
 
     @Test
     void insertEcritureComptable() {
+        fail("not implemented yet");
     }
 
     @Test
     void updateEcritureComptable() {
+        fail("not implemented yet");
     }
 
     @Test
     void deleteEcritureComptable() {
+        fail("not implemented yet");
     }
 }

@@ -75,7 +75,6 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
     // TODO à tester
     @Override
     public synchronized void addReference(EcritureComptable pEcritureComptable) {
-        // TODO à implémenter
         // Bien se réferer à la JavaDoc de cette méthode !
         /* Le principe :
                 1.  Remonter depuis la persitance la dernière valeur de la séquence du journal pour l'année de l'écriture
@@ -88,10 +87,10 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
                 4.  Enregistrer (insert/update) la valeur de la séquence en persitance
                     (table sequence_ecriture_comptable)
          */
-
-        // TODO : Check Ecriture Comptable puis Update Ecriture Comptable
         Calendar cal = Calendar.getInstance();
         cal.setTime(pEcritureComptable.getDate());
+
+        /* === Enregistre dans la bdd la sequence d'écriture comptable === */
         /* vérifie qu l'on a bien une valeur pour l'année concernée */
         if (getLastFromSpecificYearSequenceEcritureComptable(cal.get(Calendar.YEAR)) != null){
             SequenceEcritureComptable seq = null;
@@ -102,9 +101,18 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
             } catch (InvalidYearException e) {
                     e.printStackTrace();
             }
+            /* on vérifie si l'écriture comptable est toujours conformes aux standards */
+            try {
+                checkEcritureComptable(pEcritureComptable);
+            } catch (FunctionalException e) {
+                e.printStackTrace();
+            }
+            /* on update l'entité de l'écriture comptable dans la bdd */
+            getDaoProxy().getComptabiliteDao().updateEcritureComptable(pEcritureComptable);
             /* on insère l'entité de la sequence d'écriture dans la bdd */
             getDaoProxy().getComptabiliteDao().insertSequenceEcritureComptable(seq);
         }
+
         /* Dans le cas où nous n'avons rien pour l'année concernée, nous créons une entité dans la table séquence. */
         else {
             SequenceEcritureComptable seq = null;
@@ -114,9 +122,17 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
             } catch (InvalidYearException e) {
                 e.printStackTrace();
             }
+            /* on vérifie si l'écriture comptable est toujours conformes aux standards */
+            try {
+                checkEcritureComptable(pEcritureComptable);
+            } catch (FunctionalException e) {
+                e.printStackTrace();
+            }
+            /* on update l'entité de l'écriture comptable dans la bdd */
+            getDaoProxy().getComptabiliteDao().updateEcritureComptable(pEcritureComptable);
+            /* on insère l'entité de la sequence d'écriture dans la bdd */
             getDaoProxy().getComptabiliteDao().insertSequenceEcritureComptable(seq);
         }
-
     }
 
     /**
