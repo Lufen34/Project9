@@ -90,11 +90,7 @@
             </value>
         </property>
         
-        <property name="SQLgetListSequenceEcritureComptable">
-            <value>
-                SELECT * FROM myerp.sequence_ecriture_comptable
-            </value>
-        </property>
+        <property name="SQLgetListSequenceEcritureComptable" value="SELECT * FROM myerp.sequence_ecriture_comptable"/>
 
         <property name="SQLupdateSequenceEcritureComptable">
             <value>
@@ -115,11 +111,8 @@
             </value>
         </property>
 
-        <property name="SQLgetLastFromSpecificYearSequenceEcritureComptable">
-            <value>
-                SELECT max(derniere_valeur) FROM myerp.sequence_ecriture_comptable where YEAR(annee) = :annee;
-            </value>
-        </property>
+        <property name="SQLgetLastFromSpecificYearSequenceEcritureComptable"
+                  value="SELECT max(derniere_valeur) FROM myerp.sequence_ecriture_comptable where YEAR(annee) = :annee;"/>
     </bean>
 
 </beans>

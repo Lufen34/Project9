@@ -8,8 +8,12 @@ import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
+import com.dummy.myerp.business.contrat.BusinessProxy;
+import com.dummy.myerp.business.impl.BusinessProxyImpl;
+import com.dummy.myerp.business.impl.TransactionManager;
 import com.dummy.myerp.consumer.dao.contrat.ComptabiliteDao;
 import com.dummy.myerp.consumer.dao.contrat.DaoProxy;
+import com.dummy.myerp.consumer.dao.impl.DaoProxyImpl;
 import com.dummy.myerp.consumer.dao.impl.db.dao.ComptabiliteDaoImpl;
 import com.dummy.myerp.model.bean.comptabilite.*;
 import com.dummy.myerp.model.exceptions.InvalidYearException;
@@ -37,6 +41,10 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
      * Instantiates a new Comptabilite manager.
      */
     public ComptabiliteManagerImpl() {
+        DaoProxy vDaoProxy = DaoProxyImpl.getInstance();
+        BusinessProxy vBusinessProxy = BusinessProxyImpl.getInstance(vDaoProxy, TransactionManager.getInstance());
+
+        configure(vBusinessProxy, vDaoProxy, TransactionManager.getInstance());
     }
 
 

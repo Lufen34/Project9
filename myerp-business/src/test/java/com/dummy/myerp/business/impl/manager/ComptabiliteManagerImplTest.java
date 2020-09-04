@@ -5,23 +5,43 @@ import java.util.Calendar;
 import java.util.Date;
 
 
+import com.dummy.myerp.consumer.dao.impl.db.dao.ComptabiliteDaoImpl;
 import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
 import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
 import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
 import com.dummy.myerp.model.bean.comptabilite.LigneEcritureComptable;
 import com.dummy.myerp.technical.exception.FunctionalException;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class ComptabiliteManagerImplTest {
 
-    private ComptabiliteManagerImpl manager = new ComptabiliteManagerImpl();
+    @Mock
+    private ComptabiliteDaoImpl cDao;
+    @InjectMocks
+    private ComptabiliteManagerImpl manager;
 
+    @BeforeEach
+    void init(){
+        manager = new ComptabiliteManagerImpl();
+    }
+
+    @AfterEach
+    void unRef() {
+        manager = null;
+    }
 
     @Test
     public void checkEcritureComptableUnit_Libelle() throws Exception {
@@ -189,7 +209,17 @@ public class ComptabiliteManagerImplTest {
 
     @Test
     void addReference() {
-        fail("not implemented yet");
+
+    }
+
+    @Test
+    void addReference_isRequestFrom_LastValueFromYearValid() {
+        when(cDao.getLastFromSpecificYearSequenceEcritureComptable(2016)).thenReturn(88);
+
+        final int result = manager.getLastFromSpecificYearSequenceEcritureComptable(2016);
+
+        verify(manager).getLastFromSpecificYearSequenceEcritureComptable(2016);
+        assertThat(result).isEqualTo(88);
     }
 
     @Test
