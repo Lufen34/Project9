@@ -2,6 +2,7 @@ package com.dummy.myerp.consumer.dao.impl;
 
 import com.dummy.myerp.consumer.dao.contrat.ComptabiliteDao;
 import com.dummy.myerp.consumer.dao.contrat.DaoProxy;
+import com.dummy.myerp.consumer.dao.impl.db.dao.ComptabiliteDaoImpl;
 
 
 /**
@@ -11,7 +12,7 @@ public final class DaoProxyImpl implements DaoProxy {
 
     // ==================== Attributs ====================
     /** {@link ComptabiliteDao} */
-    private ComptabiliteDao comptabiliteDao;
+    private ComptabiliteDao comptabiliteDao = ComptabiliteDaoImpl.getInstance();
 
 
     // ==================== Constructeurs ====================

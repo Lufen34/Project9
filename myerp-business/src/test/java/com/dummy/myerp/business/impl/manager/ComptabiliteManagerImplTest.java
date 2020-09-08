@@ -192,7 +192,7 @@ public class ComptabiliteManagerImplTest {
         });
     }
 
-    @Test
+  @Test
     void getListCompteComptable() {
         fail("not implemented yet");
     }

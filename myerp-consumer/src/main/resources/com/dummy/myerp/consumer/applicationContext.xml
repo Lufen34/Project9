@@ -4,7 +4,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                         http://www.springframework.org/schema/beans/spring-beans-4.3.xsd">
 
-
     <!-- ====================   Consumer   ==================== -->
     <!-- AbstractDbConsumer -->
     <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
@@ -46,7 +45,6 @@
     <bean id="dataSourceMYERP" class="com.dummy.myerp.technical.util.spring.NullFactoryBean">
         <constructor-arg value="javax.sql.DataSource"/>
     </bean>
-
 
     <!-- ========== SQL ========== -->
     <import resource="sqlContext.xml"/>

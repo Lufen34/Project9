@@ -53,7 +53,6 @@
         <!-- ===== Version properties ===== -->
         <log4j.version>2.13.3</log4j.version>
         <spring.version>5.2.8.RELEASE</spring.version>
-
     </properties>
 
 

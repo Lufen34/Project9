@@ -4,9 +4,11 @@ import java.sql.ResultSet;
 import java.sql.Types;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.dummy.myerp.consumer.dao.impl.db.rowmapper.comptabilite.*;
 import com.dummy.myerp.model.bean.comptabilite.*;
+import org.springframework.context.annotation.Bean;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -15,6 +17,9 @@ import com.dummy.myerp.consumer.dao.contrat.ComptabiliteDao;
 import com.dummy.myerp.consumer.db.AbstractDbConsumer;
 import com.dummy.myerp.consumer.db.DataSourcesEnum;
 import com.dummy.myerp.technical.exception.NotFoundException;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+
+import javax.sql.DataSource;
 
 
 /**
@@ -40,10 +45,24 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
      */
     protected ComptabiliteDaoImpl() {
         super();
+        Map<DataSourcesEnum, DataSource> vMapDataSource = new HashMap<DataSourcesEnum, DataSource>();
+        vMapDataSource.put(DataSourcesEnum.MYERP, dataSource());
+        configure(vMapDataSource);
     }
 
 
     // ==================== Méthodes ====================
+
+    @Bean
+    private DataSource dataSource(){
+        DriverManagerDataSource ds = new DriverManagerDataSource();
+        ds.setDriverClassName("org.postgresql.Driver");
+        ds.setUrl("jdbc:postgresql://localhost:9032/db_myerp");
+        ds.setUsername("usr_myerp");
+        ds.setPassword("myerp");
+        return ds;
+    }
+
     /** SQLgetListCompteComptable */
     private static String SQLgetListCompteComptable;
     public void setSQLgetListCompteComptable(String pSQLgetListCompteComptable) {

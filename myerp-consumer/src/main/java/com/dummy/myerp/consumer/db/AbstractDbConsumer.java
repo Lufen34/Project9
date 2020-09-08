@@ -6,9 +6,11 @@ import javax.sql.DataSource;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
 import com.dummy.myerp.consumer.ConsumerHelper;
 import com.dummy.myerp.consumer.dao.contrat.DaoProxy;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 
 /**
@@ -44,7 +46,6 @@ public abstract class AbstractDbConsumer {
     protected static DaoProxy getDaoProxy() {
         return ConsumerHelper.getDaoProxy();
     }
-
 
     // ==================== Méthodes ====================
     /**
