@@ -53,6 +53,10 @@
         <!-- ===== Version properties ===== -->
         <log4j.version>2.13.3</log4j.version>
         <spring.version>5.2.8.RELEASE</spring.version>
+        <!-- ===== sonarcloud properties ===== -->
+        <sonar.projectKey>Lufen34_Project9</sonar.projectKey>
+        <sonar.organization>onune5mgafygrs6rbwhf5hwvm0kfx5s1</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
 
