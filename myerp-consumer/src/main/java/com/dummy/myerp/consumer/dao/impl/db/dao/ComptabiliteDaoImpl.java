@@ -343,7 +343,8 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
         MapSqlParameterSource vSqlParams = new MapSqlParameterSource();
         vSqlParams.addValue("annee", pYear);
         Integer derniere_valeur;
-        derniere_valeur = vJdbcTemplate.queryForObject(SQLgetLastFromSpecificYearSequenceEcritureComptable, new HashMap<>(), Integer.class);
+        //derniere_valeur = vJdbcTemplate.queryForObject(SQLgetLastFromSpecificYearSequenceEcritureComptable, new HashMap<>(), Integer.class);
+        derniere_valeur = vJdbcTemplate.queryForObject(SQLgetLastFromSpecificYearSequenceEcritureComptable, vSqlParams, Integer.class);
 
         return derniere_valeur;
     }

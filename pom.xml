@@ -64,10 +64,10 @@
     <!-- Modules -->
     <!-- =============================================================== -->
     <modules>
+        <module>myerp-business</module>
         <module>myerp-technical</module>
         <module>myerp-model</module>
         <module>myerp-consumer</module>
-        <module>myerp-business</module>
     </modules>
 
 
@@ -124,6 +124,11 @@
             <!-- ========== Modules ========== -->
             <dependency>
                 <groupId>${project.groupId}</groupId>
+                <artifactId>myerp-business</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
                 <artifactId>myerp-technical</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -137,12 +142,6 @@
                 <artifactId>myerp-consumer</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>myerp-business</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
 
             <!-- ========== Libraries ========== -->
             <!-- ===== Log4j ===== -->
@@ -383,7 +382,7 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>build-helper-maven-plugin</artifactId>
-                    <version>1.10</version>
+                    <version>3.2.0</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -436,7 +435,6 @@
             </plugin>-->
 
             <!-- ===== Création du rapport des tests unitaires (JUnit) ===== -->
-
 
 
 

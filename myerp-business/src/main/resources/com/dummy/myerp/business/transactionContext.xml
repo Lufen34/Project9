@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns="http://www.springframework.org/schema/beans"
+       xmlns="http://www.springframework.org/schema/beans" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-                           http://www.springframework.org/schema/beans/spring-beans-4.3.xsd">
+                           http://www.springframework.org/schema/beans/spring-beans-4.3.xsd http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
 
     <!-- Transaction Manager -->
     <bean id="TransactionManager"
@@ -17,4 +17,14 @@
     <bean id="txManagerMYERP" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSourceMYERP"/>
     </bean>
+
+    <beans>
+        <bean id="dataSourceMYERP" class="org.apache.commons.dbcp2.BasicDataSource">
+            <property name="url" value="jdbc:postgresql://localhost:9032/db_myerp"/>
+            <property name="driverClassName" value="org.postgresql.Driver"/>
+            <property name="username" value="usr_myerp"/>
+            <property name="password" value="myerp"/>
+        </bean>
+    </beans>
+
 </beans>

@@ -23,7 +23,7 @@ public final class SpringRegistry {
 
     /** Nom des fichiers de contexte de l'application */
     private static final String CONTEXT_APPLI_LOCATION
-        = "classpath:/com/dummy/myerp/testbusiness/business/bootstrapContext.xml";
+        = "applicationContextTest.xml";
 
     /** Le context spring de l'application */
     private ApplicationContext contextAppli;
@@ -58,6 +58,7 @@ public final class SpringRegistry {
      */
     public static final ApplicationContext init() {
         // le fait d'appeler cette méthode, déclanche l'appel des initialisation static et donc le chargement du context
+
         return getInstance().contextAppli;
     }
 

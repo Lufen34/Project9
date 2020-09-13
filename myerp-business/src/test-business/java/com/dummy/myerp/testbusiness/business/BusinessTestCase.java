@@ -10,6 +10,7 @@ import com.dummy.myerp.business.impl.TransactionManager;
  */
 public abstract class BusinessTestCase {
 
+
     static {
         SpringRegistry.init();
     }

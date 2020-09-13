@@ -113,7 +113,7 @@
 
         <property name="SQLgetLastFromSpecificYearSequenceEcritureComptable">
             <value>
-                SELECT max(derniere_valeur) FROM MYERP.sequence_ecriture_comptable where YEAR(annee) = :annee;
+                SELECT max(derniere_valeur) FROM MYERP.sequence_ecriture_comptable where annee = :annee
             </value>
         </property>
     </bean>
