@@ -1,7 +1,6 @@
 package com.dummy.myerp.business.impl.manager;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -23,12 +22,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -40,6 +37,8 @@ public class ComptabiliteManagerImplTest {
     private List<CompteComptable> compteComptableMockedList;
     @Mock
     private List<JournalComptable> journalComptableMockedList;
+    @Mock
+    private List<EcritureComptable> ecritureComptableMockedList;
     @InjectMocks
     private ComptabiliteManagerImpl manager;
 
@@ -106,7 +105,6 @@ public class ComptabiliteManagerImplTest {
     }
 
     @Test
-    //TODO faire le test que Journal n'est pas vide (comme la Date)
     public void checkEcritureComptableUnit_Journal() throws Exception {
         assertThrows(FunctionalException.class, () -> {
             EcritureComptable vEcritureComptable = new EcritureComptable.Builder()
@@ -255,8 +253,14 @@ public class ComptabiliteManagerImplTest {
     }
 
     @Test
-    void getListEcritureComptable() {
-        fail("not implemented yet");
+    void getListEcritureComptable_CheckBySize() {
+        when(ecritureComptableMockedList.size()).thenReturn(5);
+
+        final int resultSize = manager.getListEcritureComptable().size();
+        final int expectedSize = ecritureComptableMockedList.size();
+
+        assertThat(resultSize).isEqualTo(expectedSize);
+        verify(ecritureComptableMockedList).size();
     }
 
     @Test
