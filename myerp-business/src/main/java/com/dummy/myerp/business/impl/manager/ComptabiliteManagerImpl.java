@@ -82,7 +82,7 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
      */
     // TODO à tester
     @Override
-    public synchronized void addReference(EcritureComptable pEcritureComptable) {
+    public synchronized SequenceEcritureComptable addReference(EcritureComptable pEcritureComptable) {
         // Bien se réferer à la JavaDoc de cette méthode !
         /* Le principe :
                 1.  Remonter depuis la persitance la dernière valeur de la séquence du journal pour l'année de l'écriture
@@ -119,6 +119,7 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
             getDaoProxy().getComptabiliteDao().updateEcritureComptable(pEcritureComptable);
             /* on insère l'entité de la sequence d'écriture dans la bdd */
             getDaoProxy().getComptabiliteDao().insertSequenceEcritureComptable(seq);
+            return seq;
         }
 
         /* Dans le cas où nous n'avons rien pour l'année concernée, nous créons une entité dans la table séquence. */
@@ -140,6 +141,7 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
             getDaoProxy().getComptabiliteDao().updateEcritureComptable(pEcritureComptable);
             /* on insère l'entité de la sequence d'écriture dans la bdd */
             getDaoProxy().getComptabiliteDao().insertSequenceEcritureComptable(seq);
+            return seq;
         }
     }
 

@@ -149,9 +149,7 @@ public class EcritureComptable {
     public void setReference(String codeJournal, String libelleJournal, Date pDate, int pId) {
         try {
             journal = new JournalComptable(codeJournal, libelleJournal);
-        } catch (StringSizeTooBigException e) {
-            e.printStackTrace();
-        } catch (EmptyStringException e) {
+        } catch (StringSizeTooBigException | EmptyStringException e) {
             e.printStackTrace();
         }
         date = pDate;

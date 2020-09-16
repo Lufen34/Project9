@@ -298,7 +298,7 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
 
     private static String SQLupdateSequenceEcritureComptable;
     public void setSQLupdateSequenceEcritureComptable(String pSQLupdateSequenceEcritureComptable) {
-        SQLupdateEcritureComptable = pSQLupdateSequenceEcritureComptable;
+        SQLupdateSequenceEcritureComptable = pSQLupdateSequenceEcritureComptable;
     }
 
 

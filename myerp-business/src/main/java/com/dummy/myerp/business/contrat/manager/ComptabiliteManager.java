@@ -58,7 +58,7 @@ public interface ComptabiliteManager {
      * <p><strong>Attention :</strong> l'écriture n'est pas enregistrée en persistance</p>
      * @param pEcritureComptable L'écriture comptable concernée
      */
-    void addReference(EcritureComptable pEcritureComptable);
+    SequenceEcritureComptable addReference(EcritureComptable pEcritureComptable);
 
     /**
      * Vérifie que l'Ecriture comptable respecte les règles de gestion.
