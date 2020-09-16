@@ -28,7 +28,7 @@ public class EcritureComptable {
 
     // ==================== Attributs ====================
     /** The Id. */
-    @NotNull private Integer id;
+    private Integer id;
     /** Journal comptable */
     @NotNull private JournalComptable journal;
     /** The Reference. */
@@ -239,18 +239,12 @@ public class EcritureComptable {
         EcritureComptable that = (EcritureComptable) o;
 
         if (!id.equals(that.id)) return false;
-        if (!journal.equals(that.journal)) return false;
-        if (!reference.equals(that.reference)) return false;
-        if (!date.equals(that.date)) return false;
         return libelle.equals(that.libelle);
     }
 
     @Override
     public int hashCode() {
         int result = id.hashCode();
-        result = 31 * result + journal.hashCode();
-        result = 31 * result + reference.hashCode();
-        result = 31 * result + date.hashCode();
         result = 31 * result + libelle.hashCode();
         return result;
     }

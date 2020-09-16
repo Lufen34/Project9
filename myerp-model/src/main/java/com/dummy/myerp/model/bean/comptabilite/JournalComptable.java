@@ -106,4 +106,21 @@ public class JournalComptable {
         return vRetour;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        JournalComptable that = (JournalComptable) o;
+
+        if (!code.equals(that.code)) return false;
+        return libelle.equals(that.libelle);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = code.hashCode();
+        result = 31 * result + libelle.hashCode();
+        return result;
+    }
 }

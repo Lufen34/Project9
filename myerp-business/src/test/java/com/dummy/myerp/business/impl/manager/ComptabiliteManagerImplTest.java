@@ -19,10 +19,7 @@ import com.dummy.myerp.model.exceptions.EmptyStringException;
 import com.dummy.myerp.model.exceptions.StringSizeTooBigException;
 import com.dummy.myerp.technical.exception.FunctionalException;
 import com.dummy.myerp.testbusiness.business.SpringRegistry;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -31,9 +28,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ExtendWith(MockitoExtension.class)
 public class ComptabiliteManagerImplTest {
+
+    private static EcritureComptable testEcritureComptable;
 
     @Mock
     private ComptabiliteDaoImpl cDao;
@@ -54,18 +53,36 @@ public class ComptabiliteManagerImplTest {
 
 
     @BeforeAll
-    static void initContext(){
+    static void initContext() throws EmptyStringException, StringSizeTooBigException, FunctionalException {
         SpringRegistry.init();
+        testEcritureComptable = new EcritureComptable.Builder()
+                .Id(6)
+                .journal(new JournalComptable("AC", "Achat"))
+                .date(new Date())
+                .libelle("test")
+                .build();
+        testEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(706, "test"),
+                "test", new BigDecimal(123),
+                new BigDecimal(123)));
+        testEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(706, "test"),
+                "test",  new BigDecimal(1234),
+                new BigDecimal(1234)));
     }
 
     @BeforeEach
-    void init(){
-       // AbstractBusinessManager.configure(businessProxy, daoProxy, transactionManager);
+    @Tag("Integration")
+    void init() throws EmptyStringException, StringSizeTooBigException, FunctionalException {
+
     }
 
     @AfterEach
     void unRef() {
-        //managerUnderTest = null;
+        //testEcritureComptable = null;
+    }
+
+    @AfterAll
+    static void GlobalUnref() {
+        testEcritureComptable = null;
     }
 
     @Test
@@ -359,22 +376,28 @@ public class ComptabiliteManagerImplTest {
     }
 
     @Test
+    @Order(1)
+    @Tag("Integration")
     void insertEcritureComptable() throws FunctionalException, EmptyStringException, StringSizeTooBigException {
+        Calendar date = Calendar.getInstance();
+        date.set(2020, Calendar.SEPTEMBER, 16);
+        Date specificDate = date.getTime();
+
         EcritureComptable vEcritureComptable = new EcritureComptable.Builder()
-                .Id(-6)
+                .Id(6)
                 .journal(new JournalComptable("AC", "Achat"))
-                .date(new Date())
+                .date(specificDate)
                 .libelle("test")
                 .build();
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
-                null, new BigDecimal(123),
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(706, "test"),
+                "test", new BigDecimal(123),
                 new BigDecimal(123)));
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),
-                null,  new BigDecimal(1234),
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(706, "test"),
+                "test",  new BigDecimal(1234),
                 new BigDecimal(1234)));
 
-        managerUnderTest.insertEcritureComptable(vEcritureComptable);
-        assertThat(managerUnderTest.getListEcritureComptable().contains(vEcritureComptable)).isTrue();
+        managerUnderTest.insertEcritureComptable(testEcritureComptable);
+        assertThat(managerUnderTest.getListEcritureComptable().contains(testEcritureComptable)).isTrue();
     }
 
     @Test
@@ -383,7 +406,11 @@ public class ComptabiliteManagerImplTest {
     }
 
     @Test
-    void deleteEcritureComptable() {
-        fail("not implemented yet");
+    @Order(2)
+    @Tag("Integration")
+    void deleteEcritureComptable() throws EmptyStringException, StringSizeTooBigException, FunctionalException {
+
+        managerUnderTest.deleteEcritureComptable(testEcritureComptable.getId());
+        assertThat(managerUnderTest.getListEcritureComptable().contains(testEcritureComptable)).isFalse();
     }
 }
