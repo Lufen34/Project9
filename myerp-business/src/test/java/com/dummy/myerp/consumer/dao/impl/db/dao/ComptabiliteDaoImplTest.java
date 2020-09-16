@@ -11,118 +11,147 @@ class ComptabiliteDaoImplTest {
 
     @Test
     void getInstance() {
+        fail("Not implemented yet");
     }
 
     @Test
     void setSQLgetListCompteComptable() {
+        fail("Not implemented yet");
     }
 
     @Test
     void getListCompteComptable() {
+        fail("Not implemented yet");
     }
 
     @Test
     void setSQLgetListJournalComptable() {
+        fail("Not implemented yet");
     }
 
     @Test
     void getListJournalComptable() {
+        fail("Not implemented yet");
     }
 
     @Test
     void setSQLgetListEcritureComptable() {
+        fail("Not implemented yet");
     }
 
     @Test
     void getListEcritureComptable() {
+        fail("Not implemented yet");
     }
 
     @Test
     void setSQLgetEcritureComptable() {
+        fail("Not implemented yet");
     }
 
     @Test
     void getEcritureComptable() {
+        fail("Not implemented yet");
     }
 
     @Test
     void setSQLgetEcritureComptableByRef() {
+        fail("Not implemented yet");
     }
 
     @Test
     void getEcritureComptableByRef() {
+        fail("Not implemented yet");
     }
 
     @Test
     void setSQLloadListLigneEcriture() {
+        fail("Not implemented yet");
     }
 
     @Test
     void loadListLigneEcriture() {
+        fail("Not implemented yet");
     }
 
     @Test
     void setSQLinsertEcritureComptable() {
+        fail("Not implemented yet");
     }
 
     @Test
     void insertEcritureComptable() {
+        fail("Not implemented yet");
     }
 
     @Test
     void setSQLinsertListLigneEcritureComptable() {
+        fail("Not implemented yet");
     }
 
     @Test
     void insertListLigneEcritureComptable() {
+        fail("Not implemented yet");
     }
 
     @Test
     void setSQLupdateEcritureComptable() {
+        fail("Not implemented yet");
     }
 
     @Test
     void updateEcritureComptable() {
+        fail("Not implemented yet");
     }
 
     @Test
     void setSQLdeleteEcritureComptable() {
+        fail("Not implemented yet");
     }
 
     @Test
     void deleteEcritureComptable() {
+        fail("Not implemented yet");
     }
 
     @Test
     void setSQLdeleteListLigneEcritureComptable() {
+        fail("Not implemented yet");
     }
 
     @Test
     void deleteListLigneEcritureComptable() {
+        fail("Not implemented yet");
     }
 
     @Test
     void setSQLgetListSequenceEcritureComptable() {
+        fail("Not implemented yet");
     }
 
     @Test
     void getListSequenceEcritureComptable() {
+        fail("Not implemented yet");
     }
 
     @Test
     void setSQLupdateSequenceEcritureComptable() {
+        fail("Not implemented yet");
     }
 
     @Test
     void updateSequenceEcritureComptable() {
+        fail("Not implemented yet");
     }
 
     @Test
     void setSQLinsertSequenceEcritureComptable() {
+        fail("Not implemented yet");
     }
 
     @Test
     void insertSequenceEcritureComptable() {
+        fail("Not implemented yet");
     }
 
     @ParameterizedTest
@@ -134,5 +163,6 @@ class ComptabiliteDaoImplTest {
 
     @Test
     void getLastFromSpecificYearSequenceEcritureComptable() {
+        fail("Not implemented yet");
     }
 }

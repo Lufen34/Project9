@@ -28,7 +28,7 @@ public class EcritureComptable {
 
     // ==================== Attributs ====================
     /** The Id. */
-    private Integer id;
+    @NotNull private Integer id;
     /** Journal comptable */
     @NotNull private JournalComptable journal;
     /** The Reference. */
@@ -61,7 +61,7 @@ public class EcritureComptable {
     public static class Builder {
 
         /** The Id. */
-        private Integer id;
+        @NotNull private Integer id;
 
         /** Journal comptable */
         @NotNull private JournalComptable journal;
@@ -142,7 +142,7 @@ public class EcritureComptable {
                     .append('-')
                     .append(cal.get(Calendar.YEAR))
                     .append('/')
-                    .append(String.format("%05d", id));
+                    .append(String.format("%05d", Math.abs(id)));
             return sb.toString();
     }
 
@@ -229,5 +229,29 @@ public class EcritureComptable {
             .append(StringUtils.join(listLigneEcriture, "\n")).append("\n]")
             .append("}");
         return vStB.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        EcritureComptable that = (EcritureComptable) o;
+
+        if (!id.equals(that.id)) return false;
+        if (!journal.equals(that.journal)) return false;
+        if (!reference.equals(that.reference)) return false;
+        if (!date.equals(that.date)) return false;
+        return libelle.equals(that.libelle);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id.hashCode();
+        result = 31 * result + journal.hashCode();
+        result = 31 * result + reference.hashCode();
+        result = 31 * result + date.hashCode();
+        result = 31 * result + libelle.hashCode();
+        return result;
     }
 }

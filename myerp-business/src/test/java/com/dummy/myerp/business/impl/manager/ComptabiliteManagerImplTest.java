@@ -6,6 +6,10 @@ import java.util.Date;
 import java.util.List;
 
 
+import com.dummy.myerp.business.contrat.BusinessProxy;
+import com.dummy.myerp.business.impl.AbstractBusinessManager;
+import com.dummy.myerp.business.impl.TransactionManager;
+import com.dummy.myerp.consumer.dao.contrat.DaoProxy;
 import com.dummy.myerp.consumer.dao.impl.db.dao.ComptabiliteDaoImpl;
 import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
 import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
@@ -34,13 +38,19 @@ public class ComptabiliteManagerImplTest {
     @Mock
     private ComptabiliteDaoImpl cDao;
     @Mock
+    private DaoProxy daoProxy;
+    @Mock
+    private TransactionManager transactionManager;
+    @Mock
+    private BusinessProxy businessProxy;
+    @Mock
     private List<CompteComptable> compteComptableMockedList;
     @Mock
     private List<JournalComptable> journalComptableMockedList;
     @Mock
     private List<EcritureComptable> ecritureComptableMockedList;
     @InjectMocks
-    private ComptabiliteManagerImpl manager;
+    private final ComptabiliteManagerImpl managerUnderTest = new ComptabiliteManagerImpl();;
 
 
     @BeforeAll
@@ -50,12 +60,12 @@ public class ComptabiliteManagerImplTest {
 
     @BeforeEach
     void init(){
-        manager = new ComptabiliteManagerImpl();
+       // AbstractBusinessManager.configure(businessProxy, daoProxy, transactionManager);
     }
 
     @AfterEach
     void unRef() {
-        manager = null;
+        //managerUnderTest = null;
     }
 
     @Test
@@ -63,6 +73,7 @@ public class ComptabiliteManagerImplTest {
         EcritureComptable vEcritureComptable;
 
         vEcritureComptable = new EcritureComptable.Builder()
+                .Id(-6)
                 .journal(new JournalComptable("AC", "Achat"))
                 .date(new Date())
                 .libelle("")
@@ -74,7 +85,7 @@ public class ComptabiliteManagerImplTest {
                                                                                  null, null,
                                                                                     new BigDecimal(123)));
         assertThrows(FunctionalException.class, () -> {
-            manager.checkEcritureComptableUnit(vEcritureComptable);
+            managerUnderTest.checkEcritureComptableUnit(vEcritureComptable);
         });
 
     }
@@ -95,6 +106,7 @@ public class ComptabiliteManagerImplTest {
         EcritureComptable vEcritureComptable;
 
         vEcritureComptable = new EcritureComptable.Builder()
+                .Id(-7)
                 .journal(new JournalComptable("AC", "Achat"))
                 .date(new Date())
                 .libelle("test")
@@ -119,10 +131,11 @@ public class ComptabiliteManagerImplTest {
     public void checkEcritureComptableUnitViolation() throws Exception {
         EcritureComptable vEcritureComptable;
         vEcritureComptable = new EcritureComptable.Builder().date(new Date())
+                .Id(-5)
                 .journal(new JournalComptable("AC", "Des stylos pour gérard"))
                 .build();
         assertThrows(FunctionalException.class, ()-> {
-            manager.checkEcritureComptableUnit(vEcritureComptable);
+            managerUnderTest.checkEcritureComptableUnit(vEcritureComptable);
         });
     }
 
@@ -130,6 +143,7 @@ public class ComptabiliteManagerImplTest {
     @Test
     public void checkEcritureComptableUnitRG2() throws Exception {
         EcritureComptable vEcritureComptable = new EcritureComptable.Builder()
+                .Id(-5)
                 .journal(new JournalComptable("AC", "Achat"))
                 .date(new Date())
                 .libelle("Libelle")
@@ -142,13 +156,14 @@ public class ComptabiliteManagerImplTest {
                                                                                  null, null,
                                                                                  new BigDecimal(1234)));
         assertThrows(FunctionalException.class, () -> {
-            manager.checkEcritureComptableUnit(vEcritureComptable);
+            managerUnderTest.checkEcritureComptableUnit(vEcritureComptable);
         });
     }
 
     @Test
     public void checkEcritureComptableUnitRG3() throws Exception {
         EcritureComptable vEcritureComptable = new EcritureComptable.Builder()
+                .Id(-5)
                 .journal(new JournalComptable("AC", "Achat"))
                 .date(new Date())
                 .libelle("Libelle")
@@ -161,7 +176,7 @@ public class ComptabiliteManagerImplTest {
                                                                                  null, new BigDecimal(123),
                                                                                  null));
         assertThrows(FunctionalException.class, () -> {
-            manager.checkEcritureComptableUnit(vEcritureComptable);
+            managerUnderTest.checkEcritureComptableUnit(vEcritureComptable);
         });
     }
 
@@ -181,7 +196,7 @@ public class ComptabiliteManagerImplTest {
                 "test",  new BigDecimal(1234),
                 new BigDecimal(1234)));
         assertDoesNotThrow(()-> {
-           manager.checkEcritureComptableUnit(vEcritureComptable);
+           managerUnderTest.checkEcritureComptableUnit(vEcritureComptable);
         });
     }
 
@@ -193,25 +208,24 @@ public class ComptabiliteManagerImplTest {
                 .libelle("Libelle")
                 .Id(22)
                 .build();
-
         vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
-                null, new BigDecimal(123),
+                "test", new BigDecimal(123),
                 new BigDecimal(123)));
         vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),
-                null,  new BigDecimal(1234),
+                "test",  new BigDecimal(1234),
                 new BigDecimal(1234)));
-
         assertDoesNotThrow(()-> {
-            manager.checkEcritureComptableUnit(vEcritureComptable);
+            managerUnderTest.checkEcritureComptableUnit(vEcritureComptable);
         });
     }
 
+    // TODO en discuter avec mon mentor
     @Test
     void getListCompteComptable_CheckBySize() {
 
-        when(compteComptableMockedList.size()).thenReturn(7);
+       when(compteComptableMockedList.size()).thenReturn(7);
 
-        final int resultSize = manager.getListCompteComptable().size();
+        final int resultSize = managerUnderTest.getListCompteComptable().size();
         final int expectedSize = compteComptableMockedList.size();
 
         assertThat(resultSize).isEqualTo(expectedSize);
@@ -222,7 +236,7 @@ public class ComptabiliteManagerImplTest {
     void getListCompteComptable_CheckByNumero() {
         when(compteComptableMockedList.get(0)).thenReturn(new CompteComptable(401));
 
-        final int resultNumero = manager.getListCompteComptable().get(0).getNumero();
+        final int resultNumero = managerUnderTest.getListCompteComptable().get(0).getNumero();
         final int expectedNumero = compteComptableMockedList.get(0).getNumero();
 
         assertThat(resultNumero).isEqualTo(expectedNumero);
@@ -234,7 +248,7 @@ public class ComptabiliteManagerImplTest {
 
         when(journalComptableMockedList.size()).thenReturn(4);
 
-        final int resultSize = manager.getListJournalComptable().size();
+        final int resultSize = managerUnderTest.getListJournalComptable().size();
         final int expectedSize = journalComptableMockedList.size();
 
         assertThat(resultSize).isEqualTo(expectedSize);
@@ -245,7 +259,7 @@ public class ComptabiliteManagerImplTest {
     void getListJournalComptable_CheckByLibelle() throws EmptyStringException, StringSizeTooBigException {
         when(journalComptableMockedList.get(0)).thenReturn(new JournalComptable("ac", "Achat"));
 
-        final String resultLibelle = manager.getListJournalComptable().get(0).getLibelle();
+        final String resultLibelle = managerUnderTest.getListJournalComptable().get(0).getLibelle();
         final String expectedLibelle = journalComptableMockedList.get(0).getLibelle();
 
         assertThat(resultLibelle).isEqualTo(expectedLibelle);
@@ -256,7 +270,7 @@ public class ComptabiliteManagerImplTest {
     void getListEcritureComptable_CheckBySize() {
         when(ecritureComptableMockedList.size()).thenReturn(5);
 
-        final int resultSize = manager.getListEcritureComptable().size();
+        final int resultSize = managerUnderTest.getListEcritureComptable().size();
         final int expectedSize = ecritureComptableMockedList.size();
 
         assertThat(resultSize).isEqualTo(expectedSize);
@@ -273,7 +287,7 @@ public class ComptabiliteManagerImplTest {
     void addReference_isRequestFrom_LastValueFromYearValid() {
         when(cDao.getLastFromSpecificYearSequenceEcritureComptable(2016)).thenReturn(88);
 
-        final int result = manager.getLastFromSpecificYearSequenceEcritureComptable(2016);
+        final int result = managerUnderTest.getLastFromSpecificYearSequenceEcritureComptable(2016);
         final int expected = cDao.getLastFromSpecificYearSequenceEcritureComptable(2016);
 
         assertThat(result).isEqualTo(expected);
@@ -282,18 +296,85 @@ public class ComptabiliteManagerImplTest {
     }
 
     @Test
-    void checkEcritureComptable() {
-        fail("not implemented yet");
+    void checkEcritureComptable() throws EmptyStringException, StringSizeTooBigException, FunctionalException {
+        EcritureComptable vEcritureComptable = new EcritureComptable.Builder()
+                .Id(11)
+                .journal(new JournalComptable("AC", "Achat"))
+                .date(new Date())
+                .libelle("des stylos")
+                .build();
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
+                null, new BigDecimal(123),
+                new BigDecimal(123)));
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),
+                null,  new BigDecimal(1234),
+                new BigDecimal(1234)));
+
+        assertDoesNotThrow(()-> {
+            managerUnderTest.checkEcritureComptable(vEcritureComptable);
+        });
     }
 
     @Test
-    void checkEcritureComptableContext() {
-        fail("not implemented yet");
+    void checkEcritureComptable_Exception() throws EmptyStringException, StringSizeTooBigException, FunctionalException {
+        EcritureComptable vEcritureComptable = new EcritureComptable.Builder()
+                .Id(11)
+                .journal(new JournalComptable("AC", "Achat"))
+                .date(new Date())
+                .libelle("") // empty
+                .build();
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
+                null, new BigDecimal(123),
+                new BigDecimal(123)));
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),
+                null,  new BigDecimal(1234),
+                new BigDecimal(1234)));
+
+        assertThrows(Exception.class, () -> {
+           managerUnderTest.checkEcritureComptable(vEcritureComptable);
+        });
     }
 
     @Test
-    void insertEcritureComptable() {
-        fail("not implemented yet");
+    void checkEcritureComptableContext_IfEcritureExists() throws EmptyStringException, StringSizeTooBigException, FunctionalException {
+        Calendar date = Calendar.getInstance();
+        date.set(2016, Calendar.DECEMBER, 31);
+        Date specificDate = date.getTime();
+
+        EcritureComptable vEcritureComptable = new EcritureComptable.Builder()
+                .Id(-1)
+                .journal(new JournalComptable("AC", "Achat"))
+                .date(specificDate)
+                .libelle("Cartouches d'imprimante") // em
+                .build();
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
+                null, new BigDecimal(123),
+                new BigDecimal(123)));
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),
+                null,  new BigDecimal(1234),
+                new BigDecimal(1234)));
+        assertThrows(Exception.class, ()->{
+            managerUnderTest.checkEcritureComptableContext(vEcritureComptable);
+        });
+    }
+
+    @Test
+    void insertEcritureComptable() throws FunctionalException, EmptyStringException, StringSizeTooBigException {
+        EcritureComptable vEcritureComptable = new EcritureComptable.Builder()
+                .Id(-6)
+                .journal(new JournalComptable("AC", "Achat"))
+                .date(new Date())
+                .libelle("test")
+                .build();
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
+                null, new BigDecimal(123),
+                new BigDecimal(123)));
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),
+                null,  new BigDecimal(1234),
+                new BigDecimal(1234)));
+
+        managerUnderTest.insertEcritureComptable(vEcritureComptable);
+        assertThat(managerUnderTest.getListEcritureComptable().contains(vEcritureComptable)).isTrue();
     }
 
     @Test
