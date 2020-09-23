@@ -73,6 +73,8 @@
             <version>6.1.5.Final</version>
         </dependency>
 
+
+
         <!-- ===== JSR 341 - implementation of the Unified Expression Language ===== -->
         <dependency>
             <groupId>org.glassfish</groupId>
@@ -110,20 +112,16 @@
 
         <!-- ===== Database (pour les tests) ===== -->
         <!-- Pool de connexion -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-dbcp2</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <!-- Drivers JDBC PostgreSQL -->
+        <!-- <dependency>
+             <groupId>org.apache.commons</groupId>
+             <artifactId>commons-dbcp2</artifactId>
+             <scope>test</scope>
+         </dependency>-->
+         <!-- Drivers JDBC PostgreSQL -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-dbcp2</artifactId>
         </dependency>
     </dependencies>
 

@@ -175,12 +175,6 @@
                 <artifactId>validation-api</artifactId>
                 <version>2.0.1.Final</version>
             </dependency>
-            <!-- implementation -->
-            <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-validator</artifactId>
-                <version>6.1.5.Final</version>
-            </dependency>
 
             <!-- ===== Apache Commons ===== -->
             <dependency>
@@ -244,6 +238,14 @@
                 <version>42.2.15.jre7</version>
                 <scope>runtime</scope>
             </dependency>
+
+            <!-- implementation -->
+            <dependency>
+                <groupId>org.hibernate.validator</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>6.0.19.Final</version>
+            </dependency>
+
 
             <!-- ===== Test unitaires ===== -->
             <dependency>
