@@ -58,6 +58,7 @@
             <artifactId>myerp-consumer</artifactId>
         </dependency>
 
+
         <!-- ===== Spring JDBC/Tx ===== -->
         <!-- spring-tx : transaction, JCA, DAO -->
         <dependency>
@@ -112,11 +113,11 @@
 
         <!-- ===== Database (pour les tests) ===== -->
         <!-- Pool de connexion -->
-        <!-- <dependency>
+         <dependency>
              <groupId>org.apache.commons</groupId>
              <artifactId>commons-dbcp2</artifactId>
              <scope>test</scope>
-         </dependency>-->
+         </dependency>
          <!-- Drivers JDBC PostgreSQL -->
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -150,6 +151,7 @@
                                 <configuration>
                                     <sources>
                                         <source>src/test-business/java</source>
+                                        <source>src/test/java</source>
                                     </sources>
                                 </configuration>
                             </execution>
