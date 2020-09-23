@@ -2,10 +2,7 @@ package com.dummy.myerp.consumer.dao.contrat;
 
 import java.util.List;
 
-import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
-import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
-import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
-import com.dummy.myerp.model.bean.comptabilite.SequenceEcritureComptable;
+import com.dummy.myerp.model.bean.comptabilite.*;
 import com.dummy.myerp.technical.exception.NotFoundException;
 
 
@@ -108,4 +105,10 @@ public interface ComptabiliteDao {
      * @return
      */
     Integer getLastFromSpecificYearSequenceEcritureComptable(Integer pYear);
+
+    /**
+     * Renvoie la list de LigneEcritureComptable dans la table en fonction de l'id
+     * @param pId
+     */
+    List<LigneEcritureComptable> getListLigneEcritureComptable(Integer pId);
 }

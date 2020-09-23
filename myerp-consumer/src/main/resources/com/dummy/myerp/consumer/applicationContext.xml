@@ -20,6 +20,12 @@
         </property>
     </bean>
 
+    <bean id="dataSourceMYERP" class="org.apache.commons.dbcp2.BasicDataSource">
+        <property name="url" value="jdbc:postgresql://localhost:9032/db_myerp"/>
+        <property name="driverClassName" value="org.postgresql.Driver"/>
+        <property name="username" value="usr_myerp"/>
+        <property name="password" value="myerp"/>
+    </bean>
 
     <!-- ==================== Consumer-Proxy ==================== -->
 
@@ -40,8 +46,9 @@
         <property name="comptabiliteDao" ref="ComptabiliteDaoImpl"/>
     </bean>
 
+    <!--  <import resource="../../../../../../../../myerp-business/src/main/resources/com/dummy/myerp/business/transactionContext.xml"/> -->
 
-    <!-- ==================== Databases ==================== -->
+     <!-- ==================== Databases ==================== -->
     <!-- <bean id="dataSourceMYERP" class="com.dummy.myerp.technical.util.spring.NullFactoryBean">
         <constructor-arg value="javax.sql.DataSource"/>
     </bean> -->

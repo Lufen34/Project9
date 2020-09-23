@@ -25,6 +25,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ExtendWith(MockitoExtension.class)
 public class ComptabiliteManagerImplTest {
@@ -34,17 +35,9 @@ public class ComptabiliteManagerImplTest {
     @Mock
     private ComptabiliteDaoImpl cDao;
     @Mock
-    private DaoProxy daoProxy;
-    @Mock
-    private TransactionManager transactionManager;
-    @Mock
-    private BusinessProxy businessProxy;
-    @Mock
     private List<CompteComptable> compteComptableMockedList;
     @Mock
     private List<JournalComptable> journalComptableMockedList;
-    @Mock
-    private List<EcritureComptable> ecritureComptableMockedList;
     @InjectMocks
     private final ComptabiliteManagerImpl managerUnderTest = new ComptabiliteManagerImpl();;
 
@@ -233,7 +226,6 @@ public class ComptabiliteManagerImplTest {
         });
     }
 
-    // TODO en discuter avec mon mentor
     @Test
     void getListCompteComptable_CheckBySize() {
 
@@ -291,7 +283,6 @@ public class ComptabiliteManagerImplTest {
         verify(ecritureComptableMockedList).size();
     }*/
 
-    //TODO Talk with my mentor about how ungeneralized this test is.
     @Test
     void addReference_isRequestFrom_LastValueFromYearValid() {
         when(cDao.getLastFromSpecificYearSequenceEcritureComptable(2016)).thenReturn(88);

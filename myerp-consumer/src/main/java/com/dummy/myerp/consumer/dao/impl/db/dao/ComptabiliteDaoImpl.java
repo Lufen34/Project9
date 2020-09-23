@@ -2,6 +2,7 @@ package com.dummy.myerp.consumer.dao.impl.db.dao;
 
 import java.sql.ResultSet;
 import java.sql.Types;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import com.dummy.myerp.model.bean.comptabilite.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import com.dummy.myerp.consumer.dao.contrat.ComptabiliteDao;
@@ -302,7 +304,6 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
     }
 
 
-    //TODO a tester (fait maison)
     @Override
     public void updateSequenceEcritureComptable(SequenceEcritureComptable pSequenceEcritureComptable) {
         NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(getDataSource(DataSourcesEnum.MYERP));
@@ -348,4 +349,19 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
 
         return derniere_valeur;
     }
+
+    private static String SQLgetListLigneEcritureComptable;
+    public void setSQLgetListLigneEcritureComptable(String pSQLgetListLigneEcritureComptable) {
+        SQLgetListLigneEcritureComptable = pSQLgetListLigneEcritureComptable;
+    }
+
+    @Override
+    public List<LigneEcritureComptable> getListLigneEcritureComptable(Integer pId) {
+        NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(this.getDataSource(DataSourcesEnum.MYERP));
+        LigneEcritureComptableRM vRM = new LigneEcritureComptableRM();
+        Map<String, Integer> namedParameters = Collections.singletonMap("ecriture_id", pId);
+
+        return vJdbcTemplate.query(SQLgetListLigneEcritureComptable, namedParameters, vRM);
+    }
+
 }

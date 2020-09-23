@@ -75,7 +75,6 @@ public final class SpringRegistry {
         return vBean;
     }
 
-
     /**
      * Renvoie l'instance de {@link BusinessProxy} de l'application
      *
@@ -84,7 +83,6 @@ public final class SpringRegistry {
     public static BusinessProxy getBusinessProxy() {
         return (BusinessProxy) SpringRegistry.getBean("BusinessProxy");
     }
-
 
     /**
      * Renvoie l'instance de {@link TransactionManager} de l'application
