@@ -71,20 +71,12 @@
     <option name="TEST_RUNNER" value="UI" />
   </component>
   <component name="JavadocGenerationManager">
-    <option name="OUTPUT_DIRECTORY" />
-    <option name="OPTION_SCOPE" value="protected" />
     <option name="OPTION_HIERARCHY" value="false" />
     <option name="OPTION_NAVIGATOR" value="false" />
     <option name="OPTION_INDEX" value="false" />
     <option name="OPTION_SEPARATE_INDEX" value="false" />
-    <option name="OPTION_USE_1_1" value="false" />
-    <option name="OPTION_DOCUMENT_TAG_USE" value="false" />
-    <option name="OPTION_DOCUMENT_TAG_AUTHOR" value="false" />
-    <option name="OPTION_DOCUMENT_TAG_VERSION" value="false" />
     <option name="OPTION_DOCUMENT_TAG_DEPRECATED" value="false" />
     <option name="OPTION_DEPRECATED_LIST" value="false" />
-    <option name="OTHER_OPTIONS" />
-    <option name="HEAP_SIZE" />
     <option name="OPEN_IN_BROWSER" value="false" />
   </component>
   <component name="JikesSettings">
@@ -122,7 +114,7 @@
       <module fileurl="file://$PROJECT_DIR$/myerp-technical/myerp-technical.iml" filepath="$PROJECT_DIR$/myerp-technical/myerp-technical.iml" />
     </modules>
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="AdoptOpenJDK 11.0.8" project-jdk-type="JavaSDK" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="false" project-jdk-name="AdoptOpenJDK 11.0.8" project-jdk-type="JavaSDK" />
   <component name="RemoteRepositoriesConfiguration">
     <remote-repository>
       <option name="id" value="project.local" />
