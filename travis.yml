@@ -1,4 +1,4 @@
-sudo: false
+dist: xenial
 
 language: java
 jdk: openjdk11
@@ -14,3 +14,13 @@ cache:
 
 notifications:
   email: lufen34@gmail.com
+
+  addons:
+    sonarcloud:
+      organization: "onune5mgafygrs6rbwhf5hwvm0kfx5s1"
+      token:
+        secure: "**************************" # encrypted value of your token
+
+  script:
+    # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
+    - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=Lufen34_Project9
