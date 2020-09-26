@@ -2,8 +2,6 @@ addons:
   apt:
     packages:
       - docker-ce
-      - docker-ce-cli
-      - containerd.io
 
   sonarcloud:
     organization: "onune5mgafygrs6rbwhf5hwvm0kfx5s1"
