@@ -8,7 +8,6 @@ before_install:
   - curl -L https://raw.githubusercontent.com/Lufen34/Project9/master/docker/dev/docker-compose.yml > docker-compose.yml
   #- chmod +x docker-compose.yml
   #- sudo mv docker-compose /usr/local/bin
-  - docker-compose --version
   - docker-compose pull
   - docker-compose build
   - docker-compose start
