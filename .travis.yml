@@ -18,13 +18,9 @@ before_install:
   #- sudo apt-get -y install docker-ce docker-ce-cli containerd.io
   - docker-compose --version
   - sudo rm /usr/local/bin/docker-compose
-  - curl -L https://raw.githubusercontent.com/Lufen34/Project9/master/docker/dev/docker-compose.yml > docker-compose
-  - chmod +x docker-compose
-  - sudo mv docker-compose /usr/local/bin
-  - sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
-  - docker-compose pull
-  - docker-compose build
-  - docker-compose start
+  - curl -L https://raw.githubusercontent.com/Lufen34/Project9/master/docker/dev/docker-compose.yml > docker-compose.yml
+  - cd /docker/dev/
+  - docker-compose up
 
 language: java
 jdk: openjdk11
