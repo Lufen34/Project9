@@ -1,13 +1,28 @@
+addons:
+  apt:
+    packages:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+
+  sonarcloud:
+    organization: "onune5mgafygrs6rbwhf5hwvm0kfx5s1"
+    token:
+      secure: "**************************" # encrypted value of your token
+
+services:
+  - docker
+
 before_install:
   - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
   - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
   - sudo apt-get update
-  - sudo apt-get -y install docker-ce docker-ce-cli containerd.io
+  #- sudo apt-get -y install docker-ce docker-ce-cli containerd.io
   - docker-compose --version
   - sudo rm /usr/local/bin/docker-compose
-  - curl -L https://raw.githubusercontent.com/Lufen34/Project9/master/docker/dev/docker-compose.yml > docker-compose.yml
-  #- chmod +x docker-compose.yml
-  #- sudo mv docker-compose /usr/local/bin
+  - curl -L https://raw.githubusercontent.com/Lufen34/Project9/master/docker/dev/docker-compose.yml > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
   - docker-compose pull
   - docker-compose build
   - docker-compose start
@@ -25,11 +40,6 @@ cache:
 notifications:
   email: lufen34@gmail.com
 
-addons:
-  sonarcloud:
-      organization: "onune5mgafygrs6rbwhf5hwvm0kfx5s1"
-      token:
-        secure: "**************************" # encrypted value of your token
 
 script:
   - mvn test
