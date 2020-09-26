@@ -6,12 +6,12 @@ import java.util.Date;
 import java.util.List;
 
 
+import com.dummy.myerp.SpringRegistry;
 import com.dummy.myerp.consumer.dao.impl.db.dao.ComptabiliteDaoImpl;
 import com.dummy.myerp.model.bean.comptabilite.*;
 import com.dummy.myerp.model.exceptions.EmptyStringException;
 import com.dummy.myerp.model.exceptions.StringSizeTooBigException;
 import com.dummy.myerp.technical.exception.FunctionalException;
-import com.dummy.myerp.testbusiness.business.SpringRegistry;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

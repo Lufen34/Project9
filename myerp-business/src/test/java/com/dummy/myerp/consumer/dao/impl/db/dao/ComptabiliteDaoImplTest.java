@@ -1,12 +1,12 @@
 package com.dummy.myerp.consumer.dao.impl.db.dao;
 
+import com.dummy.myerp.SpringRegistry;
 import com.dummy.myerp.model.bean.comptabilite.*;
 import com.dummy.myerp.model.exceptions.EmptyStringException;
 import com.dummy.myerp.model.exceptions.InvalidYearException;
 import com.dummy.myerp.model.exceptions.StringSizeTooBigException;
 import com.dummy.myerp.technical.exception.FunctionalException;
 import com.dummy.myerp.technical.exception.NotFoundException;
-import com.dummy.myerp.testbusiness.business.SpringRegistry;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
