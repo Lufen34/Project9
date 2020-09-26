@@ -1,4 +1,15 @@
-dist: xenial
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install -o Dpkr::Options::"--force-confold" --force-yes -y docker-engine
+  - docker-compose --version
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/Lufen34/Project9/blob/master/docker/dev/docker-compose.yml-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+  - docker-compose --version
+  - docker-compose pull
+  - docker-compose build
+  - docker-compose start
 
 language: java
 jdk: openjdk11
@@ -24,3 +35,4 @@ script:
     - ./mvn test
     # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
     - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=Lufen34_Project9
+
