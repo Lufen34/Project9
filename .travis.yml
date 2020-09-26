@@ -1,3 +1,6 @@
+env:
+  - DOCKER_COMPOSE_VERSION=1.27.2
+
 addons:
   apt:
     packages:
@@ -18,7 +21,13 @@ before_install:
   #- sudo apt-get -y install docker-ce docker-ce-cli containerd.io
   - docker-compose --version
   - sudo rm /usr/local/bin/docker-compose
-  - curl -L https://raw.githubusercontent.com/Lufen34/Project9/master/docker/dev/docker-compose.yml > docker-compose.yml
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+  - sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+  - docker-compose pull
+  - docker-compose build
+  - docker-compose start
 
 language: java
 jdk: openjdk11
@@ -35,8 +44,6 @@ notifications:
 
 
 script:
-  - cd /docker/dev/
-  - docker-compose up
   - mvn test
   # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
   - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=Lufen34_Project9
