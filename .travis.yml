@@ -1,9 +1,7 @@
 env:
   matrix:
   - DOCKER_COMPOSE_VERSION=1.27.2
-  global:
-    secure: 1YJGC4VfgdtCsLG1r9So5enX+NK6Q1Yakq5YVd3eDJE8bdAjkyPk+M+LJm+3bawwrJyt0OczqZ8sXbu6V70XFtSZ0ldjCR62KxiZRsTOgu4E4IsMUs5WW4zw1M8fa7iFSwWqVSsguerw/fuJSxM1J5o2KWAwue7RH2DBchOuDZYCbysiQ9ujezLsFgFzJkQaP5bqsIbwejO607s0M96cC9gQa8YEeu+lD852XJeaW0bwJNEgCqFD+N3N+N8x1SkVxB/LgUkPZvV+tO7NHXXJ3dBNrJdmAZuA77ug2PLCJE9rK/EkahiW/Jr4RSFVJ5nIia0wblrTZlG3hv6+RCrL7+eLEve0I3+tO1W1kCYAIu3DiJQ8fh63S1rS5Bi6b/kM0Ks/XxuTIiV9ArunZuOzXTrEHWC5MrDM+stT0HjHAmEe02oLkQ7wyE7OipT8NM6J4qPYY4tuO06/EyY2TFKq84V/bRbylPD7jZW6nUiYwAyQ5W7rBnzzFitnzcH+ogoPSbOYdEDNAA9hQQgHl7kcSFqAH+JbDRi+kKWmK4mLKpKusFYfdHRZQ5OWyKyY2xDlzkK9tM2QzeuywcQWzYoiosY7XNYiftiM1vxsniyWevMCK+1QLYOSBTM+w8wy4x7/ObzRgKvfL0MoB7LjxgSnZZg1+EeqVN/vOk1BFDv4s08=
-
+  -
 addons:
   sonarcloud:
     organization: "onune5mgafygrs6rbwhf5hwvm0kfx5s1"
