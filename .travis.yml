@@ -1,7 +1,7 @@
 env:
   matrix:
   - DOCKER_COMPOSE_VERSION=1.27.2
-  -
+
 addons:
   sonarcloud:
     organization: "onune5mgafygrs6rbwhf5hwvm0kfx5s1"

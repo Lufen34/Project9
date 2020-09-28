@@ -23,7 +23,7 @@ import static org.mockito.Mockito.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ExtendWith(MockitoExtension.class)
-public class ComptabiliteManagerImplTest {
+class ComptabiliteManagerImplTest {
 
     private static EcritureComptable testEcritureComptable;
 
@@ -71,7 +71,7 @@ public class ComptabiliteManagerImplTest {
     }
 
     @Test
-    public void checkEcritureComptableUnit_Libelle() throws Exception {
+    void checkEcritureComptableUnit_Libelle() throws Exception {
         EcritureComptable vEcritureComptable;
 
         vEcritureComptable = new EcritureComptable.Builder()
@@ -93,7 +93,7 @@ public class ComptabiliteManagerImplTest {
     }
 
     @Test
-    public void checkEcritureComptableUnit_IsParamDateValid() throws Exception {
+     void checkEcritureComptableUnit_IsParamDateValid() throws Exception {
         assertThrows(FunctionalException.class, () -> {
             EcritureComptable vEcritureComptable = new EcritureComptable.Builder()
                     .journal(new JournalComptable("AC", "Achat"))
@@ -104,7 +104,7 @@ public class ComptabiliteManagerImplTest {
     }
 
     @Test
-    public void checkEcritureComptableUnit_CheckDateStandard() throws Exception {
+     void checkEcritureComptableUnit_CheckDateStandard() throws Exception {
         EcritureComptable vEcritureComptable;
 
         vEcritureComptable = new EcritureComptable.Builder()
@@ -119,7 +119,7 @@ public class ComptabiliteManagerImplTest {
     }
 
     @Test
-    public void checkEcritureComptableUnit_Journal() throws Exception {
+     void checkEcritureComptableUnit_Journal() throws Exception {
         assertThrows(FunctionalException.class, () -> {
             EcritureComptable vEcritureComptable = new EcritureComptable.Builder()
                     .journal(null)
@@ -130,7 +130,7 @@ public class ComptabiliteManagerImplTest {
     }
 
     @Test
-    public void checkEcritureComptableUnitViolation() throws Exception {
+     void checkEcritureComptableUnitViolation() throws Exception {
         EcritureComptable vEcritureComptable;
         vEcritureComptable = new EcritureComptable.Builder().date(new Date())
                 .Id(-5)
@@ -143,7 +143,7 @@ public class ComptabiliteManagerImplTest {
 
 
     @Test
-    public void checkEcritureComptableUnitRG2() throws Exception {
+     void checkEcritureComptableUnitRG2() throws Exception {
         EcritureComptable vEcritureComptable = new EcritureComptable.Builder()
                 .Id(-5)
                 .journal(new JournalComptable("AC", "Achat"))
@@ -163,7 +163,7 @@ public class ComptabiliteManagerImplTest {
     }
 
     @Test
-    public void checkEcritureComptableUnitRG3() throws Exception {
+     void checkEcritureComptableUnitRG3() throws Exception {
         EcritureComptable vEcritureComptable = new EcritureComptable.Builder()
                 .Id(-5)
                 .journal(new JournalComptable("AC", "Achat"))
@@ -184,7 +184,7 @@ public class ComptabiliteManagerImplTest {
 
 
     @Test
-    public void checkEcritureComptableUnitRG4() throws Exception {
+     void checkEcritureComptableUnitRG4() throws Exception {
         EcritureComptable vEcritureComptable = new EcritureComptable.Builder()
                 .Id(1)
                 .journal(new JournalComptable("AC", "Achat"))
@@ -203,7 +203,7 @@ public class ComptabiliteManagerImplTest {
     }
 
     @Test
-    public void checkEcritureComptableUnitRG5() throws Exception {
+     void checkEcritureComptableUnitRG5() throws Exception {
         EcritureComptable vEcritureComptable = new EcritureComptable.Builder()
                 .journal(new JournalComptable("BQ", "Achat"))
                 .date(new Date())

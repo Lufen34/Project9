@@ -168,7 +168,7 @@ public class EcritureComptableTest {
         vEcriture.getListLigneEcriture().add(this.createLigne(1, "200", null));
         vEcriture.getListLigneEcriture().add(this.createLigne(1, "400", null));
         vEcriture.getListLigneEcriture().add(this.createLigne(1, "100", null));
-        assertThat(vEcriture.getTotalDebit()).isEqualTo("700");
+        assertThat(vEcriture.getTotalDebit()).isEqualTo(new BigDecimal(700));
     }
 
     @Test
@@ -176,7 +176,7 @@ public class EcritureComptableTest {
         vEcriture.getListLigneEcriture().add(this.createLigne(1, null, "200"));
         vEcriture.getListLigneEcriture().add(this.createLigne(1, null, "400"));
         vEcriture.getListLigneEcriture().add(this.createLigne(1, null, "100"));
-        assertThat(vEcriture.getTotalCredit()).isEqualTo("700");
+        assertThat(vEcriture.getTotalCredit()).isEqualTo(new BigDecimal(700));
     }
 
     @Test

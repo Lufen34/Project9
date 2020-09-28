@@ -1,1 +1,1 @@
-# Project 9 [![Build Status](https://travis-ci.com/Lufen34/Project9.svg?branch=master)](https://travis-ci.com/Lufen34/Project9)
+# Project 9 [![Build Status](https://travis-ci.com/Lufen34/Project9.svg?branch=master)](https://travis-ci.com/Lufen34/Project9) [![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/dashboard?id=Lufen34_Project9)
