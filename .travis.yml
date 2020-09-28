@@ -1,54 +1,45 @@
 env:
+  matrix:
   - DOCKER_COMPOSE_VERSION=1.27.2
-
+  global:
+    secure: 1YJGC4VfgdtCsLG1r9So5enX+NK6Q1Yakq5YVd3eDJE8bdAjkyPk+M+LJm+3bawwrJyt0OczqZ8sXbu6V70XFtSZ0ldjCR62KxiZRsTOgu4E4IsMUs5WW4zw1M8fa7iFSwWqVSsguerw/fuJSxM1J5o2KWAwue7RH2DBchOuDZYCbysiQ9ujezLsFgFzJkQaP5bqsIbwejO607s0M96cC9gQa8YEeu+lD852XJeaW0bwJNEgCqFD+N3N+N8x1SkVxB/LgUkPZvV+tO7NHXXJ3dBNrJdmAZuA77ug2PLCJE9rK/EkahiW/Jr4RSFVJ5nIia0wblrTZlG3hv6+RCrL7+eLEve0I3+tO1W1kCYAIu3DiJQ8fh63S1rS5Bi6b/kM0Ks/XxuTIiV9ArunZuOzXTrEHWC5MrDM+stT0HjHAmEe02oLkQ7wyE7OipT8NM6J4qPYY4tuO06/EyY2TFKq84V/bRbylPD7jZW6nUiYwAyQ5W7rBnzzFitnzcH+ogoPSbOYdEDNAA9hQQgHl7kcSFqAH+JbDRi+kKWmK4mLKpKusFYfdHRZQ5OWyKyY2xDlzkK9tM2QzeuywcQWzYoiosY7XNYiftiM1vxsniyWevMCK+1QLYOSBTM+w8wy4x7/ObzRgKvfL0MoB7LjxgSnZZg1+EeqVN/vOk1BFDv4s08=
 addons:
   apt:
     packages:
-      - docker-ce
-
+    - docker-ce
   sonarcloud:
-    organization: "onune5mgafygrs6rbwhf5hwvm0kfx5s1"
+    organization: onune5mgafygrs6rbwhf5hwvm0kfx5s1
     token:
-      secure: "**************************" # encrypted value of your token
-
+      secure: "**************************"
 services:
-  - docker
-
+- docker
 before_install:
-  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-  - sudo apt-get update
-  #- sudo apt-get -y install docker-ce docker-ce-cli containerd.io
-  - docker-compose --version
-  - sudo rm /usr/local/bin/docker-compose
-  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-  - chmod +x docker-compose
-  - sudo mv docker-compose /usr/local/bin
-  - sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
-  - cd ./docker/dev/
-  - docker-compose pull
-  - docker-compose build
-  - docker-compose create
-  - docker-compose up -d
-  - cd ..
-  - cd ..
-
+- curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+- sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu
+  $(lsb_release -cs) stable"
+- sudo apt-get update
+- docker-compose --version
+- sudo rm /usr/local/bin/docker-compose
+- curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname
+  -s`-`uname -m` > docker-compose
+- chmod +x docker-compose
+- sudo mv docker-compose /usr/local/bin
+- sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+- cd ./docker/dev/
+- docker-compose pull
+- docker-compose build
+- docker-compose create
+- docker-compose up -d
+- cd ..
+- cd ..
 language: java
 jdk: openjdk11
-
 install: true
-
-
 cache:
   directories:
-    - $HOME/.m2
-
+  - "$HOME/.m2"
 notifications:
   email: lufen34@gmail.com
-
-
 script:
-  - mvn test
-  # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
-  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=Lufen34_Project9
-
+- mvn test
+- mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=Lufen34_Project9
