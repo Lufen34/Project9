@@ -30,8 +30,8 @@ before_install:
   - docker-compose build
   - docker-compose create
   - docker-compose up -d
-  - cd..
-  - cd..
+  - cd ..
+  - cd ..
 
 language: java
 jdk: openjdk11
