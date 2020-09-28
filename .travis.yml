@@ -28,7 +28,7 @@ before_install:
   - cd ./docker/dev/
   - docker-compose pull
   - docker-compose build
-  - docker-compose start
+  - docker-compose up
 
 language: java
 jdk: openjdk11
