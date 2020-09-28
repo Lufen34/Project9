@@ -97,6 +97,10 @@
         <profile>
             <id>test-consumer</id>
         </profile>
+        <!-- Profile utilisé pour lancer les tests d'intégration de la couche Model -->
+        <profile>
+            <id>test-model</id>
+        </profile>
     </profiles>
 
 
