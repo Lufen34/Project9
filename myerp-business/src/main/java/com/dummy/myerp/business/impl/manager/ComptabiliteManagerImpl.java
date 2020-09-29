@@ -16,8 +16,6 @@ import com.dummy.myerp.model.bean.comptabilite.*;
 import com.dummy.myerp.model.exceptions.InvalidYearException;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.transaction.TransactionStatus;
 import com.dummy.myerp.business.contrat.manager.ComptabiliteManager;
 import com.dummy.myerp.business.impl.AbstractBusinessManager;
@@ -31,7 +29,6 @@ import com.dummy.myerp.technical.exception.NotFoundException;
 public class ComptabiliteManagerImpl extends AbstractBusinessManager implements ComptabiliteManager {
 
     // ==================== Attributs ====================
-    private final Logger logger = LoggerFactory.getLogger(ComptabiliteManagerImpl.class);
 
     // ==================== Constructeurs ====================
     /**
