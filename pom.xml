@@ -402,7 +402,7 @@
                     <artifactId>build-helper-maven-plugin</artifactId>
                     <version>3.2.0</version>
                 </plugin>
-
+                <!-- TODO Plugin a delete si marche pas -->
                 <plugin>
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
@@ -425,12 +425,12 @@
                             <goals>
                                 <goal>check</goal>
                             </goals>
-                            <configuration>
-                                <destFile>${project.basedir}/../target/jacoco.exec</destFile>
-                                <append>true</append>
-                            </configuration>
                         </execution>
                     </executions>
+                    <configuration>
+                        <destFile>${project.basedir}/../target/jacoco.exec</destFile>
+                        <append>true</append>
+                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -472,6 +472,7 @@
             </plugin>
 
             <!-- ===== Création du rapport du code coverage ===== -->
+            <!-- TODO Remettre normal la config -->
             <!-- <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
