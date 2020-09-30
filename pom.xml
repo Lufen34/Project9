@@ -426,22 +426,11 @@
                                 <goal>check</goal>
                             </goals>
                             <configuration>
-                                <rules>
-                                    <rule>
-                                        <limits>
-                                            <limit>
-                                                <minimum>0.9</minimum>
-                                            </limit>
-                                        </limits>
-                                    </rule>
-                                </rules>
+                                <destFile>${project.basedir}/../target/jacoco.exec</destFile>
+                                <append>true</append>
                             </configuration>
                         </execution>
                     </executions>
-                    <configuration>
-                        <destFile>${project.basedir}/../target/jacoco.exec</destFile>
-                        <append>true</append>
-                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
