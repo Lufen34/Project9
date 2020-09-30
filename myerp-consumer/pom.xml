@@ -94,6 +94,36 @@
             <id>test-consumer</id>
             <build>
                 <plugins>
+                    <!-- TODO Plugin a delete si marche pas -->
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>0.8.5</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>report</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>report</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>jacoco-check</id>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <destFile>${project.basedir}/../target/jacoco.exec</destFile>
+                            <append>true</append>
+                        </configuration>
+                    </plugin>
                     <!-- Ajout du répertoire src/test-consumer/java en tant que source de test du module -->
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
@@ -132,34 +162,5 @@
     <!-- Build -->
     <!-- =============================================================== -->
     <build>
-        <plugin>
-            <groupId>org.jacoco</groupId>
-            <artifactId>jacoco-maven-plugin</artifactId>
-            <version>0.8.5</version>
-            <executions>
-                <execution>
-                    <goals>
-                        <goal>prepare-agent</goal>
-                    </goals>
-                </execution>
-                <execution>
-                    <id>report</id>
-                    <phase>prepare-package</phase>
-                    <goals>
-                        <goal>report</goal>
-                    </goals>
-                </execution>
-                <execution>
-                    <id>jacoco-check</id>
-                    <goals>
-                        <goal>check</goal>
-                    </goals>
-                    <configuration>
-                        <destFile>${project.basedir}/../target/jacoco.exec</destFile>
-                        <append>true</append>
-                    </configuration>
-                </execution>
-            </executions>
-        </plugin>
     </build>
 </project>
