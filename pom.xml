@@ -410,13 +410,39 @@
                     <version>0.8.5</version>
                     <executions>
                         <execution>
+                            <goals>
+                                <goal>prepare-agent</goal>
+                            </goals>
+                        </execution>
+                        <execution>
                             <id>report</id>
+                            <phase>prepare-package</phase>
                             <goals>
                                 <goal>report</goal>
                             </goals>
-                            <phase>verify</phase>
+                        </execution>
+                        <execution>
+                            <id>jacoco-check</id>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                            <configuration>
+                                <rules>
+                                    <rule>
+                                        <limits>
+                                            <limit>
+                                                <minimum>0.9</minimum>
+                                            </limit>
+                                        </limits>
+                                    </rule>
+                                </rules>
+                            </configuration>
                         </execution>
                     </executions>
+                    <configuration>
+                        <destFile>${project.basedir}/../jacoco-coverage-report/target/site/jacoco-aggregate/jacoco.exec</destFile>
+                        <append>true</append>
+                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
