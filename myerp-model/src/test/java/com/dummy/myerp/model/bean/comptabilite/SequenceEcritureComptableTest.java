@@ -39,7 +39,7 @@ class SequenceEcritureComptableTest {
             e.printStackTrace();
         }
 
-        assertThat(actualSequence.toString()).isEqualTo(expectedSequence.toString());
+        assertThat(actualSequence.toString()).hasToString(expectedSequence.toString());
     }
 
     @ParameterizedTest

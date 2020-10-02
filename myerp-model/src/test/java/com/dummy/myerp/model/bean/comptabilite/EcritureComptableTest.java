@@ -18,7 +18,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class EcritureComptableTest {
+ class EcritureComptableTest {
     private EcritureComptable vEcriture;
 
     @BeforeEach
@@ -34,11 +34,7 @@ public class EcritureComptableTest {
                     .date(dateTest)
                     .journal(new JournalComptable("AC", "test"))
                     .build();
-        } catch (StringSizeTooBigException e) {
-            e.printStackTrace();
-        } catch (EmptyStringException e) {
-            e.printStackTrace();
-        } catch (FunctionalException e) {
+        } catch (StringSizeTooBigException | FunctionalException | EmptyStringException e) {
             e.printStackTrace();
         }
     }
@@ -61,7 +57,7 @@ public class EcritureComptableTest {
 
 
     @Test
-    public void isEquilibree() {
+     void isEquilibree() {
         System.out.println(vEcriture.getListLigneEcriture().isEmpty());
         vEcriture.setLibelle("Equilibrée");
         vEcriture.getListLigneEcriture().add(this.createLigne(1, "200.50", null));
@@ -72,7 +68,7 @@ public class EcritureComptableTest {
     }
 
     @Test
-    public void isNotEquilibree() {
+     void isNotEquilibree() {
         System.out.println(vEcriture.getListLigneEcriture().isEmpty());
         vEcriture.setLibelle("Non équilibrée");
         vEcriture.getListLigneEcriture().add(this.createLigne(1, "10", null));
@@ -160,7 +156,7 @@ public class EcritureComptableTest {
         vEcriture.getListLigneEcriture().add(this.createLigne(2, null, "301"));
         vEcriture.getListLigneEcriture().add(this.createLigne(2, "40", "7"));
 
-        assertThat(vEcriture.getListLigneEcriture().toString()).isEqualTo(data.toString());
+        assertThat(vEcriture.getListLigneEcriture().toString()).hasToString(data.toString());
     }
 
     @Test

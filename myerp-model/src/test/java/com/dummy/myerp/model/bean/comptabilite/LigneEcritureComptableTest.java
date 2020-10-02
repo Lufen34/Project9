@@ -35,23 +35,23 @@ class LigneEcritureComptableTest {
         LigneEcritureComptable expectedEcriture = new LigneEcritureComptable(new CompteComptable(13, "test"),
                 "test", new BigDecimal("200"), new BigDecimal("200"));
 
-        assertThat(actualEcriture.toString()).isEqualTo(expectedEcriture.toString());
+        assertThat(actualEcriture.toString()).hasToString(expectedEcriture.toString());
     }
 
     @Test
     void setCompteComptable() {
         LigneEcritureComptable expectedEcriture = new LigneEcritureComptable(new CompteComptable(13, "test"),
                 "test", new BigDecimal("200"), new BigDecimal("200"));
-        assertThat(actualEcriture.getCompteComptable().toString()).isEqualTo(expectedEcriture.getCompteComptable().toString());
+        assertThat(actualEcriture.getCompteComptable().toString()).hasToString(expectedEcriture.getCompteComptable().toString());
 
         actualEcriture.setCompteComptable(new CompteComptable(123, "test pas mal!"));
         expectedEcriture.setCompteComptable(new CompteComptable(123, "test pas mal!"));
-        assertThat(actualEcriture.getCompteComptable().toString()).isEqualTo(expectedEcriture.getCompteComptable().toString());
+        assertThat(actualEcriture.getCompteComptable().toString()).hasToString(expectedEcriture.getCompteComptable().toString());
     }
 
     @Test
     void setCompteComptable_NotNull() {
-        assertThat(actualEcriture.getCompteComptable()).isNotEqualTo(null);
+        assertThat(actualEcriture.getCompteComptable()).isNotNull();
     }
 
     @Test
@@ -71,31 +71,31 @@ class LigneEcritureComptableTest {
 
     @Test
     void getDebit() {
-        assertThat(actualEcriture.getDebit()).isEqualTo("200");
+        assertThat(actualEcriture.getDebit()).isEqualTo(new BigDecimal(200));
         actualEcriture = new LigneEcritureComptable(new CompteComptable(13, "test"),
                 "test pas mal!", new BigDecimal("2500"), new BigDecimal("200"));
-        assertThat(actualEcriture.getDebit()).isEqualTo("2500");
+        assertThat(actualEcriture.getDebit()).isEqualTo(new BigDecimal(2500));
     }
 
     @ParameterizedTest
     @CsvSource({"250", "30014", "45987", "-5097"})
     void setDebit(String arg) {
         actualEcriture.setDebit(new BigDecimal(arg));
-        assertThat(actualEcriture.getDebit()).isEqualTo(arg);
+        assertThat(actualEcriture.getDebit()).isEqualTo(new BigDecimal(arg));
     }
 
     @Test
     void getCredit() {
-        assertThat(actualEcriture.getCredit()).isEqualTo("200");
+        assertThat(actualEcriture.getCredit()).isEqualTo((new BigDecimal(200)));
         actualEcriture = new LigneEcritureComptable(new CompteComptable(13, "test"),
                 "test pas mal!", new BigDecimal("20"), new BigDecimal("2500"));
-        assertThat(actualEcriture.getCredit()).isEqualTo("2500");
+        assertThat(actualEcriture.getCredit()).isEqualTo((new BigDecimal(2500)));
     }
 
     @ParameterizedTest
     @CsvSource({"250", "30014", "45987", "-5097"})
     void setCredit(String arg) {
         actualEcriture.setCredit(new BigDecimal(arg));
-        assertThat(actualEcriture.getCredit()).isEqualTo(arg);
+        assertThat(actualEcriture.getCredit()).isEqualTo((new BigDecimal(arg)));
     }
 }

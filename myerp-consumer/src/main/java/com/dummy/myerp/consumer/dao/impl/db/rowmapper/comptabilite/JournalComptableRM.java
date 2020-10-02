@@ -19,9 +19,7 @@ public class JournalComptableRM implements RowMapper<JournalComptable> {
         JournalComptable vBean = null;
         try {
             vBean = new JournalComptable(pRS.getString("code"), pRS.getString("libelle"));
-        } catch (StringSizeTooBigException e) {
-            e.printStackTrace();
-        } catch (EmptyStringException e) {
+        } catch (StringSizeTooBigException | EmptyStringException e) {
             e.printStackTrace();
         }
 

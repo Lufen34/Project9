@@ -11,6 +11,9 @@ public abstract class ConsumerHelper {
     /** Le DaoProxy à utiliser pour accéder aux autres classes de DAO */
     private static DaoProxy daoProxy;
 
+    private ConsumerHelper() {
+        throw new IllegalStateException("Helper class");
+    }
 
     // ==================== Constructeurs ====================
     /**

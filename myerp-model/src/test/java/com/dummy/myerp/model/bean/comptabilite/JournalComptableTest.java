@@ -26,9 +26,7 @@ class JournalComptableTest {
             journalList.add(new JournalComptable("2345", "test"));
             journalList.add(new JournalComptable("3456", "test"));
             journalList.add(new JournalComptable("4567", "test"));
-        } catch (StringSizeTooBigException e) {
-            e.printStackTrace();
-        } catch (EmptyStringException e) {
+        } catch (StringSizeTooBigException | EmptyStringException e) {
             e.printStackTrace();
         }
     }
@@ -37,9 +35,7 @@ class JournalComptableTest {
     void init_journal(){
         try {
             journal = new JournalComptable("12543", "test");
-        } catch (StringSizeTooBigException e) {
-            e.printStackTrace();
-        } catch (EmptyStringException e) {
+        } catch (StringSizeTooBigException | EmptyStringException e) {
             e.printStackTrace();
         }
     }
@@ -54,25 +50,19 @@ class JournalComptableTest {
         assertThat(journal.getCode()).isEqualTo("12543");
         try {
             journal = new JournalComptable("19", "test");
-        } catch (StringSizeTooBigException e) {
-            e.printStackTrace();
-        } catch (EmptyStringException e) {
+        } catch (StringSizeTooBigException | EmptyStringException e) {
             e.printStackTrace();
         }
         assertThat(journal.getCode()).isEqualTo("19");
         try {
             journal = new JournalComptable("125", "test");
-        } catch (StringSizeTooBigException e) {
-            e.printStackTrace();
-        } catch (EmptyStringException e) {
+        } catch (StringSizeTooBigException | EmptyStringException e) {
             e.printStackTrace();
         }
         assertThat(journal.getCode()).isEqualTo("125");
         try {
             journal = new JournalComptable("1", "test");
-        } catch (StringSizeTooBigException e) {
-            e.printStackTrace();
-        } catch (EmptyStringException e) {
+        } catch (StringSizeTooBigException | EmptyStringException e) {
             e.printStackTrace();
         }
         assertThat(journal.getCode()).isEqualTo("1");
@@ -150,9 +140,7 @@ class JournalComptableTest {
     void setLibelle() {
         try {
             journal.setLibelle("1234");
-        } catch (EmptyStringException e) {
-            e.printStackTrace();
-        } catch (StringSizeTooBigException e) {
+        } catch (EmptyStringException | StringSizeTooBigException e) {
             e.printStackTrace();
         }
         assertThat(journal.getLibelle()).isEqualTo("1234");
@@ -183,20 +171,21 @@ class JournalComptableTest {
 
     @Test
     void getByCode() {
-        assertThat(JournalComptable.getByCode(journalList, "1234").toString()).isEqualTo(journalList.get(0).toString());
-        assertThat(JournalComptable.getByCode(journalList, "2345").toString()).isEqualTo(journalList.get(1).toString());
-        assertThat(JournalComptable.getByCode(journalList, "3456").toString()).isEqualTo(journalList.get(2).toString());
-        assertThat(JournalComptable.getByCode(journalList, "4567").toString()).isEqualTo(journalList.get(3).toString());
-        assertThat(JournalComptable.getByCode(journalList, "5678")).isEqualTo(null);
-        assertThat(JournalComptable.getByCode(journalList, "6789")).isEqualTo(null);
+        assertThat(JournalComptable.getByCode(journalList, "1234").toString()).hasToString(journalList.get(0).toString());
+        assertThat(JournalComptable.getByCode(journalList, "2345").toString()).hasToString(journalList.get(1).toString());
+        assertThat(JournalComptable.getByCode(journalList, "3456").toString()).hasToString(journalList.get(2).toString());
+        assertThat(JournalComptable.getByCode(journalList, "4567").toString()).hasToString(journalList.get(3).toString());
+        assertThat(JournalComptable.getByCode(journalList, "5678")).isNull();
+        assertThat(JournalComptable.getByCode(journalList, "6789")).isNull();
 
     }
 
     @ParameterizedTest
     @ValueSource(ints = {1, 4, 33, 11, 22})
-    void getByCode_IfListIsNotNull(int arg){
+    void getByCode_IfListIsNull_ThrowIndexOutOfBoundsException(int arg){
+        List<JournalComptable> listTestNull = new ArrayList<>();
         IndexOutOfBoundsException e = assertThrows(IndexOutOfBoundsException.class, ()->
-                new ArrayList<JournalComptable>().get(arg)
+                listTestNull.get(arg)
         );
         assertThat(e.getMessage()).isEqualTo("Index " + arg + " out of bounds for length 0");
     }

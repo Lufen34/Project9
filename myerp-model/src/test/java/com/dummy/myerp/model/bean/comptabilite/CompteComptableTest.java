@@ -72,9 +72,9 @@ class CompteComptableTest {
         assertThat(CompteComptable.getByNumero(list, 24854)).isEqualTo(list.get(1));
         assertThat(CompteComptable.getByNumero(list, 624)).isEqualTo(list.get(2));
         assertThat(CompteComptable.getByNumero(list, 24)).isEqualTo(list.get(3));
-        assertThat(CompteComptable.getByNumero(list, 3)).isEqualTo(null);
-        assertThat(CompteComptable.getByNumero(list, 11)).isEqualTo(null);
-        assertThat(CompteComptable.getByNumero(list, 25)).isEqualTo(null);
-        assertThat(CompteComptable.getByNumero(list, 354894454)).isEqualTo(null);
+        assertThat(CompteComptable.getByNumero(list, 3)).isNull();
+        assertThat(CompteComptable.getByNumero(list, 11)).isNull();
+        assertThat(CompteComptable.getByNumero(list, 25)).isNull();
+        assertThat(CompteComptable.getByNumero(list, 354894454)).isNull();
     }
 }
