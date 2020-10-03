@@ -57,6 +57,7 @@ public interface ComptabiliteManager {
      *
      * <p><strong>Attention :</strong> l'écriture n'est pas enregistrée en persistance</p>
      * @param pEcritureComptable L'écriture comptable concernée
+     * @return la sequence
      */
     SequenceEcritureComptable addReference(EcritureComptable pEcritureComptable);
 
@@ -94,8 +95,8 @@ public interface ComptabiliteManager {
 
     /**
      * Renvoie la derniere valeur de l'année saisie.
-     * @param pYear
-     * @return
+     * @param pYear l'année de la séquence
+     * @return renvoie la derniere valeur de l'année
      */
     Integer getLastFromSpecificYearSequenceEcritureComptable(Integer pYear);
 }

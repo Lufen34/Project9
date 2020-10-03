@@ -95,7 +95,6 @@
             <id>test-consumer</id>
             <build>
                 <plugins>
-                    <!-- TODO Plugin a delete si marche pas -->
                     <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>

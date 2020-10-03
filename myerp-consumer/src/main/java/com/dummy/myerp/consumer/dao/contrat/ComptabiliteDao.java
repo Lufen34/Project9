@@ -95,20 +95,21 @@ public interface ComptabiliteDao {
     /**
      * Insere une séquence ecriture comptable
      * 
-     * @param pSequenceEcritureComptable
+     * @param pSequenceEcritureComptable la séquence à inserer
      */
     void insertSequenceEcritureComptable(SequenceEcritureComptable pSequenceEcritureComptable);
 
     /**
      * Renvoie la derniere valeur dans la table en fonction de l'année
-     * @param pYear
-     * @return
+     * @param pYear l'année de la sequence
+     * @return la derniere valeur de l'année saisie
      */
     Integer getLastFromSpecificYearSequenceEcritureComptable(Integer pYear);
 
     /**
      * Renvoie la list de LigneEcritureComptable dans la table en fonction de l'id
-     * @param pId
+     * @param pId l'id de la ligne d'écriture comptable
+     * @return la liste ligne ecriture comptable
      */
     List<LigneEcritureComptable> getListLigneEcritureComptable(Integer pId);
 }

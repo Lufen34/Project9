@@ -31,6 +31,7 @@ public class SequenceEcritureComptable {
      *
      * @param pAnnee -
      * @param pDerniereValeur -
+     * @throws InvalidYearException Une exception lorsque la condition n'est pas atteinte.
      */
     public SequenceEcritureComptable(Integer pAnnee, Integer pDerniereValeur) throws InvalidYearException {
         annee = checkYear(pAnnee);

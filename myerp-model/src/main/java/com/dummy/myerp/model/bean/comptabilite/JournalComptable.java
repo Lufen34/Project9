@@ -41,6 +41,8 @@ public class JournalComptable {
      *
      * @param pCode the p code
      * @param pLibelle the p libelle
+     * @throws StringSizeTooBigException Une exception lorsque la condition n'est pas atteinte.
+     * @throws EmptyStringException Une exception lorsque la condition n'est pas atteinte.
      */
     public JournalComptable(String pCode, String pLibelle) throws StringSizeTooBigException, EmptyStringException{
         code = conformCodeValue(pCode);
