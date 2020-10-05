@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SpringRegistry.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">myerp$All_in_myerp.exec</a> &gt; <a href="index.source.html" class="el_package">com.dummy.myerp</a> &gt; <span class="el_source">SpringRegistry.java</span></div><h1>SpringRegistry.java</h1><pre class="source lang-java linenums">package com.dummy.myerp;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import com.dummy.myerp.business.contrat.BusinessProxy;
+import com.dummy.myerp.business.impl.TransactionManager;
+
+
+/**
+ * Registre des Beans Spring.
+ */
+public final class SpringRegistry {
+
+    /** Logger Log4j pour la classe */
+<span class="fc" id="L17">    private static final Logger LOGGER = LogManager.getLogger(SpringRegistry.class);</span>
+
+
+    /** Instance unique de la classe (design pattern Singleton) */
+<span class="fc" id="L21">    private static final SpringRegistry INSTANCE = new SpringRegistry();</span>
+
+
+    /** Nom des fichiers de contexte de l'application */
+    private static final String CONTEXT_APPLI_LOCATION
+        = &quot;applicationContextTest.xml&quot;;
+
+    /** Le context spring de l'application */
+    private ApplicationContext contextAppli;
+
+
+    // ==================== ID des Beans Spring ====================
+
+
+    /**
+     * Constructeur.
+     */
+    private SpringRegistry() {
+<span class="fc" id="L39">        super();</span>
+<span class="fc" id="L40">        SpringRegistry.LOGGER.debug(&quot;[DEBUT] SpringRegistry() - Initialisation du contexte Spring&quot;);</span>
+<span class="fc" id="L41">        this.contextAppli = new ClassPathXmlApplicationContext(SpringRegistry.CONTEXT_APPLI_LOCATION);</span>
+<span class="fc" id="L42">        SpringRegistry.LOGGER.debug(&quot;[FIN] SpringRegistry() - Initialisation du contexte Spring&quot;);</span>
+<span class="fc" id="L43">    }</span>
+
+    /**
+     * Renvoie l'instance unique de la classe (design pattern Singleton).
+     *
+     * @return SpringRegistry
+     */
+    protected static final SpringRegistry getInstance() {
+<span class="fc" id="L51">        return SpringRegistry.INSTANCE;</span>
+    }
+
+    /**
+     * Initialise et charge le contexte Spring
+     *
+     * @return ApplicationContext
+     */
+    public static final ApplicationContext init() {
+<span class="fc" id="L60">        return getInstance().contextAppli;</span>
+    }
+
+    /**
+     * Récupération d'un bean via Spring.
+     *
+     * @param pBeanId ID du bean
+     * @return Object
+     */
+    protected static Object getBean(String pBeanId) {
+<span class="fc" id="L70">        SpringRegistry.LOGGER.debug(&quot;[DEBUT] SpringRegistry.getBean() - Bean ID : &quot; + pBeanId);</span>
+<span class="fc" id="L71">        Object vBean = SpringRegistry.getInstance().contextAppli.getBean(pBeanId);</span>
+<span class="fc" id="L72">        SpringRegistry.LOGGER.debug(&quot;[FIN] SpringRegistry.getBean() - Bean ID : &quot; + pBeanId);</span>
+<span class="fc" id="L73">        return vBean;</span>
+    }
+
+    /**
+     * Renvoie l'instance de {@link BusinessProxy} de l'application
+     *
+     * @return {@link BusinessProxy}
+     */
+    public static BusinessProxy getBusinessProxy() {
+<span class="fc" id="L82">        return (BusinessProxy) SpringRegistry.getBean(&quot;BusinessProxy&quot;);</span>
+    }
+
+    /**
+     * Renvoie l'instance de {@link TransactionManager} de l'application
+     *
+     * @return {@link TransactionManager}
+     */
+    public static TransactionManager getTransactionManager() {
+<span class="fc" id="L91">        return (TransactionManager) SpringRegistry.getBean(&quot;TransactionManager&quot;);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

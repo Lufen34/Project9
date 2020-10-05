@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ComptabiliteManagerImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">myerp$All_in_myerp.exec</a> &gt; <a href="index.source.html" class="el_package">com.dummy.myerp.business.impl.manager</a> &gt; <span class="el_source">ComptabiliteManagerImpl.java</span></div><h1>ComptabiliteManagerImpl.java</h1><pre class="source lang-java linenums">package com.dummy.myerp.business.impl.manager;
+
+import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Set;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+
+import com.dummy.myerp.business.contrat.BusinessProxy;
+import com.dummy.myerp.business.impl.BusinessProxyImpl;
+import com.dummy.myerp.business.impl.TransactionManager;
+import com.dummy.myerp.consumer.dao.contrat.DaoProxy;
+import com.dummy.myerp.consumer.dao.impl.DaoProxyImpl;
+import com.dummy.myerp.model.bean.comptabilite.*;
+import com.dummy.myerp.model.exceptions.InvalidYearException;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.transaction.TransactionStatus;
+import com.dummy.myerp.business.contrat.manager.ComptabiliteManager;
+import com.dummy.myerp.business.impl.AbstractBusinessManager;
+import com.dummy.myerp.technical.exception.FunctionalException;
+import com.dummy.myerp.technical.exception.NotFoundException;
+
+
+/**
+ * Comptabilite manager implementation.
+ */
+public class ComptabiliteManagerImpl extends AbstractBusinessManager implements ComptabiliteManager {
+
+    // ==================== Attributs ====================
+
+    // ==================== Constructeurs ====================
+    /**
+     * Instantiates a new Comptabilite manager.
+     */
+<span class="fc" id="L37">    public ComptabiliteManagerImpl() {</span>
+<span class="fc" id="L38">        DaoProxy vDaoProxy = DaoProxyImpl.getInstance();</span>
+<span class="fc" id="L39">        BusinessProxy vBusinessProxy = BusinessProxyImpl.getInstance(vDaoProxy, TransactionManager.getInstance());</span>
+
+<span class="fc" id="L41">        configure(vBusinessProxy, vDaoProxy, TransactionManager.getInstance());</span>
+<span class="fc" id="L42">    }</span>
+
+
+    // ==================== Getters/Setters ====================
+    @Override
+    public List&lt;CompteComptable&gt; getListCompteComptable() {
+<span class="fc" id="L48">        return getDaoProxy().getComptabiliteDao().getListCompteComptable();</span>
+    }
+
+    @Override
+    public List&lt;SequenceEcritureComptable&gt; getListSequenceEcritureComptable() {
+<span class="nc" id="L53">        return getDaoProxy().getComptabiliteDao().getListSequenceEcritureComptable();</span>
+    }
+
+    @Override
+    public Integer getLastFromSpecificYearSequenceEcritureComptable(Integer pYear){
+<span class="fc" id="L58">        return getDaoProxy().getComptabiliteDao().getLastFromSpecificYearSequenceEcritureComptable(pYear);</span>
+    }
+
+    @Override
+    public List&lt;JournalComptable&gt; getListJournalComptable() {
+<span class="fc" id="L63">        return getDaoProxy().getComptabiliteDao().getListJournalComptable();</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List&lt;EcritureComptable&gt; getListEcritureComptable() {
+<span class="fc" id="L71">        return getDaoProxy().getComptabiliteDao().getListEcritureComptable();</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public synchronized SequenceEcritureComptable addReference(EcritureComptable pEcritureComptable) {
+        // Bien se réferer à la JavaDoc de cette méthode !
+        /* Le principe :
+                1.  Remonter depuis la persitance la dernière valeur de la séquence du journal pour l'année de l'écriture
+                    (table sequence_ecriture_comptable)
+                2.  * S'il n'y a aucun enregistrement pour le journal pour l'année concernée :
+                        1. Utiliser le numéro 1.
+                    * Sinon :
+                        1. Utiliser la dernière valeur + 1
+                3.  Mettre à jour la référence de l'écriture avec la référence calculée (RG_Compta_5)
+                4.  Enregistrer (insert/update) la valeur de la séquence en persitance
+                    (table sequence_ecriture_comptable)
+         */
+<span class="nc" id="L91">        Calendar cal = Calendar.getInstance();</span>
+<span class="nc" id="L92">        cal.setTime(pEcritureComptable.getDate());</span>
+
+        /* === Enregistre dans la bdd la sequence d'écriture comptable === */
+        /* vérifie qu l'on a bien une valeur pour l'année concernée */
+<span class="nc bnc" id="L96" title="All 2 branches missed.">        if (getLastFromSpecificYearSequenceEcritureComptable(cal.get(Calendar.YEAR)) != null){</span>
+<span class="nc" id="L97">            SequenceEcritureComptable seq = null;</span>
+            try {
+                /* On récupère la dernière valeur de la sequence pour l'année et rajoutons + 1 à derniere_valeur */
+<span class="nc" id="L100">                seq = new SequenceEcritureComptable(cal.get(Calendar.YEAR),</span>
+<span class="nc" id="L101">                        getLastFromSpecificYearSequenceEcritureComptable(cal.get(Calendar.YEAR) + 1));</span>
+<span class="nc" id="L102">            } catch (InvalidYearException e) {</span>
+<span class="nc" id="L103">                    e.printStackTrace();</span>
+<span class="nc" id="L104">            }</span>
+            /* on vérifie si l'écriture comptable est toujours conformes aux standards */
+            try {
+<span class="nc" id="L107">                checkEcritureComptable(pEcritureComptable);</span>
+<span class="nc" id="L108">            } catch (FunctionalException e) {</span>
+<span class="nc" id="L109">                e.printStackTrace();</span>
+<span class="nc" id="L110">            }</span>
+            /* on update l'entité de l'écriture comptable dans la bdd */
+<span class="nc" id="L112">            getDaoProxy().getComptabiliteDao().updateEcritureComptable(pEcritureComptable);</span>
+            /* on insère l'entité de la sequence d'écriture dans la bdd */
+<span class="nc" id="L114">            getDaoProxy().getComptabiliteDao().insertSequenceEcritureComptable(seq);</span>
+<span class="nc" id="L115">            return seq;</span>
+        }
+
+        /* Dans le cas où nous n'avons rien pour l'année concernée, nous créons une entité dans la table séquence. */
+        else {
+<span class="nc" id="L120">            SequenceEcritureComptable seq = null;</span>
+            try {
+                /* On récupère la dernière valeur de la sequence pour l'année et rajoutons + 1 à derniere_valeur */
+<span class="nc" id="L123">                seq = new SequenceEcritureComptable(cal.get(Calendar.YEAR), 1);</span>
+<span class="nc" id="L124">            } catch (InvalidYearException e) {</span>
+<span class="nc" id="L125">                e.printStackTrace();</span>
+<span class="nc" id="L126">            }</span>
+            /* on vérifie si l'écriture comptable est toujours conformes aux standards */
+            try {
+<span class="nc" id="L129">                checkEcritureComptable(pEcritureComptable);</span>
+<span class="nc" id="L130">            } catch (FunctionalException e) {</span>
+<span class="nc" id="L131">                e.printStackTrace();</span>
+<span class="nc" id="L132">            }</span>
+            /* on update l'entité de l'écriture comptable dans la bdd */
+<span class="nc" id="L134">            getDaoProxy().getComptabiliteDao().updateEcritureComptable(pEcritureComptable);</span>
+            /* on insère l'entité de la sequence d'écriture dans la bdd */
+<span class="nc" id="L136">            getDaoProxy().getComptabiliteDao().insertSequenceEcritureComptable(seq);</span>
+<span class="nc" id="L137">            return seq;</span>
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void checkEcritureComptable(EcritureComptable pEcritureComptable) throws FunctionalException {
+<span class="fc" id="L146">        this.checkEcritureComptableUnit(pEcritureComptable);</span>
+<span class="fc" id="L147">        this.checkEcritureComptableContext(pEcritureComptable);</span>
+<span class="fc" id="L148">    }</span>
+
+
+    /**
+     * Vérifie que l'Ecriture comptable respecte les règles de gestion unitaires,
+     * c'est à dire indépendemment du contexte (unicité de la référence, exercie comptable non cloturé...)
+     *
+     * @param pEcritureComptable -
+     * @throws FunctionalException Si l'Ecriture comptable ne respecte pas les règles de gestion
+     */
+    protected void checkEcritureComptableUnit(EcritureComptable pEcritureComptable) throws FunctionalException {
+        // ===== RG_Compta_1 : Vérification des contraintes unitaires sur les attributs de l'écriture
+<span class="fc" id="L160">        Set&lt;ConstraintViolation&lt;EcritureComptable&gt;&gt; vViolations = getConstraintValidator().validate(pEcritureComptable);</span>
+<span class="fc bfc" id="L161" title="All 2 branches covered.">        if (!vViolations.isEmpty()) {</span>
+<span class="fc" id="L162">            throw new FunctionalException(&quot;L'écriture comptable ne respecte pas les règles de gestion.&quot;,</span>
+                                          new ConstraintViolationException(
+                                              &quot;L'écriture comptable ne respecte pas les contraintes de validation&quot;,
+                                              vViolations));
+        }
+
+        // ===== RG_Compta_2 : Pour qu'une écriture comptable soit valide, elle doit être équilibrée
+<span class="fc bfc" id="L169" title="All 2 branches covered.">        if (!pEcritureComptable.isEquilibree()) {</span>
+<span class="fc" id="L170">            throw new FunctionalException(&quot;L'écriture comptable n'est pas équilibrée.&quot;);</span>
+        }
+
+        // ===== RG_Compta_3 : une écriture comptable doit avoir au moins 2 lignes d'écriture (1 au débit, 1 au crédit)
+<span class="fc" id="L174">        int vNbrCredit = 0;</span>
+<span class="fc" id="L175">        int vNbrDebit = 0;</span>
+<span class="fc bfc" id="L176" title="All 2 branches covered.">        for (LigneEcritureComptable vLigneEcritureComptable : pEcritureComptable.getListLigneEcriture()) {</span>
+<span class="pc bpc" id="L177" title="1 of 2 branches missed.">            if (BigDecimal.ZERO.compareTo(ObjectUtils.defaultIfNull(vLigneEcritureComptable.getCredit(),</span>
+                                                                    BigDecimal.ZERO)) != 0) {
+<span class="fc" id="L179">                vNbrCredit++;</span>
+            }
+<span class="pc bpc" id="L181" title="1 of 2 branches missed.">            if (BigDecimal.ZERO.compareTo(ObjectUtils.defaultIfNull(vLigneEcritureComptable.getDebit(),</span>
+                                                                    BigDecimal.ZERO)) != 0) {
+<span class="fc" id="L183">                vNbrDebit++;</span>
+            }
+<span class="fc" id="L185">        }</span>
+
+<span class="pc bpc" id="L187" title="3 of 6 branches missed.">        if (pEcritureComptable.getListLigneEcriture().size() &lt; 2</span>
+            || vNbrCredit &lt; 1
+            || vNbrDebit &lt; 1) {
+<span class="nc" id="L190">            throw new FunctionalException(</span>
+                &quot;L'écriture comptable doit avoir au moins deux lignes : une ligne au débit et une ligne au crédit.&quot;);
+        }
+
+        // ===== RG_Compta_5 : Format et contenu de la référence
+        // La date de l'ecriture et la date de la reference doivent correspondre.
+<span class="fc" id="L196">        Calendar dateEcriture = Calendar.getInstance();</span>
+<span class="fc" id="L197">        dateEcriture.setTime(pEcritureComptable.getDate());</span>
+<span class="fc" id="L198">        String yearFromRef = &quot;&quot;;</span>
+<span class="pc bpc" id="L199" title="1 of 2 branches missed.">        for (int i = 0; i &lt; pEcritureComptable.getReference().length(); i++) {</span>
+<span class="fc bfc" id="L200" title="All 2 branches covered.">            if (pEcritureComptable.getReference().charAt(i) == '-') {</span>
+<span class="fc" id="L201">                yearFromRef = pEcritureComptable.getReference().substring(i+1, i+5);</span>
+<span class="fc" id="L202">                break;</span>
+            }
+        }
+<span class="pc bpc" id="L205" title="1 of 2 branches missed.">        if (dateEcriture.get(Calendar.YEAR) != Integer.parseInt(yearFromRef))</span>
+<span class="nc" id="L206">            throw new FunctionalException(&quot;La date de l'ecriture et la date de la reference doivent correspondre.&quot;);</span>
+
+<span class="fc" id="L208">    }</span>
+
+
+    /**
+     * Vérifie que l'Ecriture comptable respecte les règles de gestion liées au contexte
+     * (unicité de la référence, année comptable non cloturé...)
+     *
+     * @param pEcritureComptable -
+     * @throws FunctionalException Si l'Ecriture comptable ne respecte pas les règles de gestion
+     */
+    protected void checkEcritureComptableContext(EcritureComptable pEcritureComptable) throws FunctionalException {
+        // ===== RG_Compta_6 : La référence d'une écriture comptable doit être unique
+<span class="pc bpc" id="L220" title="1 of 2 branches missed.">        if (StringUtils.isNoneEmpty(pEcritureComptable.getReference())) {</span>
+            try {
+                // Recherche d'une écriture ayant la même référence
+<span class="fc" id="L223">                EcritureComptable vECRef = getDaoProxy().getComptabiliteDao().getEcritureComptableByRef(</span>
+<span class="fc" id="L224">                    pEcritureComptable.getReference());</span>
+
+                // Si l'écriture à vérifier est une nouvelle écriture (id == null),
+                // ou si elle ne correspond pas à l'écriture trouvée (id != idECRef), /!\ UPDATED : ou si elle correspond à l'écriture trouvée.
+                // c'est qu'il y a déjà une autre écriture avec la même référence
+<span class="pc bpc" id="L229" title="1 of 2 branches missed.">                if (pEcritureComptable.getId() == null</span>
+<span class="pc bpc" id="L230" title="1 of 2 branches missed.">                    || pEcritureComptable.getId().equals(vECRef.getId())) {</span>
+<span class="fc" id="L231">                    throw new FunctionalException(&quot;Une autre écriture comptable existe déjà avec la même référence.&quot;);</span>
+                }
+<span class="fc" id="L233">            } catch (NotFoundException vEx) {</span>
+                // Dans ce cas, c'est bon, ça veut dire qu'on n'a aucune autre écriture avec la même référence.
+<span class="nc" id="L235">            }</span>
+        }
+<span class="fc" id="L237">    }</span>
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void insertEcritureComptable(EcritureComptable pEcritureComptable) throws FunctionalException {
+<span class="fc" id="L244">        this.checkEcritureComptable(pEcritureComptable);</span>
+<span class="fc" id="L245">        TransactionStatus vTS = getTransactionManager().beginTransactionMyERP();</span>
+        try {
+<span class="fc" id="L247">            getDaoProxy().getComptabiliteDao().insertEcritureComptable(pEcritureComptable);</span>
+<span class="fc" id="L248">            getTransactionManager().commitMyERP(vTS);</span>
+<span class="fc" id="L249">            vTS = null;</span>
+        } finally {
+<span class="fc" id="L251">            getTransactionManager().rollbackMyERP(vTS);</span>
+        }
+<span class="fc" id="L253">    }</span>
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void updateEcritureComptable(EcritureComptable pEcritureComptable) throws FunctionalException {
+<span class="fc" id="L260">        TransactionStatus vTS = getTransactionManager().beginTransactionMyERP();</span>
+        try {
+<span class="fc" id="L262">            getDaoProxy().getComptabiliteDao().updateEcritureComptable(pEcritureComptable);</span>
+<span class="fc" id="L263">            getTransactionManager().commitMyERP(vTS);</span>
+<span class="fc" id="L264">            vTS = null;</span>
+        } finally {
+<span class="fc" id="L266">            getTransactionManager().rollbackMyERP(vTS);</span>
+        }
+<span class="fc" id="L268">    }</span>
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void deleteEcritureComptable(Integer pId) {
+<span class="fc" id="L275">        TransactionStatus vTS = getTransactionManager().beginTransactionMyERP();</span>
+        try {
+<span class="fc" id="L277">            getDaoProxy().getComptabiliteDao().deleteEcritureComptable(pId);</span>
+<span class="fc" id="L278">            getTransactionManager().commitMyERP(vTS);</span>
+<span class="fc" id="L279">            vTS = null;</span>
+        } finally {
+<span class="fc" id="L281">            getTransactionManager().rollbackMyERP(vTS);</span>
+        }
+<span class="fc" id="L283">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

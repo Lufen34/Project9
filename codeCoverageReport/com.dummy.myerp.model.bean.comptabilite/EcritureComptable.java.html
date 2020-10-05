@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EcritureComptable.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">myerp$All_in_myerp.exec</a> &gt; <a href="index.source.html" class="el_package">com.dummy.myerp.model.bean.comptabilite</a> &gt; <span class="el_source">EcritureComptable.java</span></div><h1>EcritureComptable.java</h1><pre class="source lang-java linenums">package com.dummy.myerp.model.bean.comptabilite;
+
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+import com.dummy.myerp.model.exceptions.EmptyStringException;
+import com.dummy.myerp.model.exceptions.StringSizeTooBigException;
+import com.dummy.myerp.technical.exception.FunctionalException;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
+/**
+ * Bean représentant une Écriture Comptable
+ */
+public class EcritureComptable {
+
+<span class="fc" id="L27">    Logger logger = LoggerFactory.getLogger(EcritureComptable.class);</span>
+
+    // ==================== Attributs ====================
+    /** The Id. */
+    private Integer id;
+    /** Journal comptable */
+    @NotNull private JournalComptable journal;
+    /** The Reference. */
+    @Pattern(regexp = &quot;^[A-Z]{2}-\\d{4}/\\d{5}&quot;)
+    private String reference;
+    /** The Date. */
+    @NotNull private Date date;
+
+    /** The Libelle. */
+    @NotNull
+    @Size(min = 1, max = 200)
+    private String libelle;
+
+    /** La liste des lignes d'écriture comptable. */
+<span class="fc" id="L46">    @Valid</span>
+    @Size(min = 2)
+    private final List&lt;LigneEcritureComptable&gt; listLigneEcriture = new ArrayList&lt;&gt;();
+
+    // ==================== Constructeur ====================
+<span class="fc" id="L51">    private EcritureComptable(Builder builder) throws FunctionalException {</span>
+<span class="fc" id="L52">        id = builder.id;</span>
+<span class="fc" id="L53">        journal = builder.journal;</span>
+<span class="fc" id="L54">        date = builder.date;</span>
+<span class="fc" id="L55">        libelle = builder.libelle;</span>
+        /* Toujours créé la référence en dernier */
+<span class="fc" id="L57">        reference = getReference();</span>
+<span class="fc" id="L58">    }</span>
+
+    // ==================== Builder ====================
+<span class="fc" id="L61">    public static class Builder {</span>
+
+        /** The Id. */
+        @NotNull private Integer id;
+
+        /** Journal comptable */
+        @NotNull private JournalComptable journal;
+
+        /** The Reference. */
+        /* Indépendant de l'utilisateur */
+        @Pattern(regexp = &quot;^[A-Z]{2}-\\d{4}/\\d{5}&quot;)
+        private String reference;
+
+        /** The Date. */
+        @NotNull private Date date;
+
+        /** The Libelle. */
+        @NotNull
+        @Size(min = 1, max = 200)
+        private String libelle;
+
+        public Builder Id(int value){
+<span class="fc" id="L83">            id = value;</span>
+<span class="fc" id="L84">            return this;</span>
+        }
+
+        public Builder journal(JournalComptable value) {
+<span class="fc" id="L88">            journal = value;</span>
+<span class="fc" id="L89">            return this;</span>
+        }
+
+        public Builder date(Date value) {
+<span class="fc" id="L93">            date = value;</span>
+<span class="fc" id="L94">            return this;</span>
+        }
+
+        public Builder libelle(String value) {
+<span class="fc" id="L98">            libelle = value;</span>
+<span class="fc" id="L99">            return this;</span>
+        }
+
+        public EcritureComptable build() throws FunctionalException {
+<span class="fc" id="L103">            Calendar cal = Calendar.getInstance();</span>
+            try {
+<span class="fc" id="L105">                cal.setTime(date);</span>
+<span class="fc" id="L106">            } catch (NullPointerException e) {</span>
+<span class="fc" id="L107">                e.printStackTrace();</span>
+<span class="fc" id="L108">                throw new FunctionalException(&quot;Please make sure that you entered a valid Date.&quot;);</span>
+<span class="fc" id="L109">            }</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">            if (journal == null)</span>
+<span class="fc" id="L111">                throw new FunctionalException(&quot;Please ensure that the journal parameter is not null.&quot;);</span>
+<span class="fc" id="L112">            StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L113">            sb.append(journal.getCode())</span>
+<span class="fc" id="L114">                    .append('-')</span>
+<span class="fc" id="L115">                    .append(cal.get(Calendar.YEAR))</span>
+<span class="fc" id="L116">                    .append('/')</span>
+<span class="fc" id="L117">                    .append(String.format(&quot;%05d&quot;, id));</span>
+<span class="fc" id="L118">            reference = sb.toString();</span>
+<span class="fc" id="L119">            return new EcritureComptable(this);</span>
+        }
+    }
+
+    // ==================== Getters/Setters ====================
+    public Integer getId() {
+<span class="fc" id="L125">        return id;</span>
+    }
+    public void setId(Integer pId) {
+<span class="fc" id="L128">        id = pId;</span>
+<span class="fc" id="L129">    }</span>
+    public JournalComptable getJournal() {
+<span class="fc" id="L131">        return journal;</span>
+    }
+    public void setJournal(JournalComptable pJournal) {
+<span class="fc" id="L134">        journal = pJournal;</span>
+<span class="fc" id="L135">    }</span>
+    public String getReference() {
+<span class="fc" id="L137">            StringBuilder sb = new StringBuilder();</span>
+
+<span class="fc" id="L139">            Calendar cal = Calendar.getInstance();</span>
+<span class="fc" id="L140">            cal.setTime(date);</span>
+<span class="fc" id="L141">            sb.append(journal.getCode())</span>
+<span class="fc" id="L142">                    .append('-')</span>
+<span class="fc" id="L143">                    .append(cal.get(Calendar.YEAR))</span>
+<span class="fc" id="L144">                    .append('/')</span>
+<span class="fc" id="L145">                    .append(String.format(&quot;%05d&quot;, Math.abs(id)));</span>
+<span class="fc" id="L146">            return sb.toString();</span>
+    }
+
+    public void setReference(String codeJournal, String libelleJournal, Date pDate, int pId) {
+        try {
+<span class="fc" id="L151">            journal = new JournalComptable(codeJournal, libelleJournal);</span>
+<span class="nc" id="L152">        } catch (StringSizeTooBigException | EmptyStringException e) {</span>
+<span class="nc" id="L153">            e.printStackTrace();</span>
+<span class="fc" id="L154">        }</span>
+<span class="fc" id="L155">        date = pDate;</span>
+<span class="fc" id="L156">        id = pId;</span>
+<span class="fc" id="L157">        reference = getReference();</span>
+<span class="fc" id="L158">    }</span>
+    public Date getDate() {
+<span class="fc" id="L160">        return date;</span>
+    }
+    public void setDate(Date pDate) {
+<span class="fc" id="L163">        date = pDate;</span>
+<span class="fc" id="L164">    }</span>
+    public String getLibelle() {
+<span class="fc" id="L166">        return libelle;</span>
+    }
+    public void setLibelle(String pLibelle) {
+<span class="fc" id="L169">        libelle = pLibelle;</span>
+<span class="fc" id="L170">    }</span>
+    public List&lt;LigneEcritureComptable&gt; getListLigneEcriture() {
+<span class="fc" id="L172">        return listLigneEcriture;</span>
+    }
+
+    /**
+     * Calcul et renvoie le total des montants au débit des lignes d'écriture
+     *
+     * @return {@link BigDecimal}, {@link BigDecimal#ZERO} si aucun montant au débit
+     */
+    public BigDecimal getTotalDebit() {
+<span class="fc" id="L181">        BigDecimal vRetour = BigDecimal.ZERO;</span>
+<span class="fc bfc" id="L182" title="All 2 branches covered.">        for (LigneEcritureComptable vLigneEcritureComptable : listLigneEcriture) {</span>
+<span class="fc bfc" id="L183" title="All 2 branches covered.">            if (vLigneEcritureComptable.getDebit() != null) {</span>
+<span class="fc" id="L184">                vRetour = vRetour.add(vLigneEcritureComptable.getDebit());</span>
+            }
+<span class="fc" id="L186">        }</span>
+<span class="fc" id="L187">        return vRetour;</span>
+    }
+
+    /**
+     * Calcul et renvoie le total des montants au crédit des lignes d'écriture
+     *
+     * @return {@link BigDecimal}, {@link BigDecimal#ZERO} si aucun montant au crédit
+     */
+    public BigDecimal getTotalCredit() {
+<span class="fc" id="L196">        BigDecimal vRetour = BigDecimal.ZERO;</span>
+<span class="fc bfc" id="L197" title="All 2 branches covered.">        for (LigneEcritureComptable vLigneEcritureComptable : listLigneEcriture) {</span>
+<span class="fc bfc" id="L198" title="All 2 branches covered.">            if (vLigneEcritureComptable.getCredit() != null) {</span>
+<span class="fc" id="L199">                vRetour = vRetour.add(vLigneEcritureComptable.getCredit());</span>
+            }
+<span class="fc" id="L201">        }</span>
+<span class="fc" id="L202">        return vRetour;</span>
+    }
+
+    /**
+     * Renvoie si l'écriture est équilibrée (TotalDebit = TotalCrédit)
+     * @return boolean
+     */
+    public boolean isEquilibree() {
+<span class="fc bfc" id="L210" title="All 2 branches covered.">        return this.getTotalDebit().compareTo(getTotalCredit()) == 0;</span>
+    }
+
+    // ==================== Méthodes ====================
+    @Override
+    public String toString() {
+<span class="nc" id="L216">        final StringBuilder vStB = new StringBuilder(this.getClass().getSimpleName());</span>
+<span class="nc" id="L217">        final String vSEP = &quot;, &quot;;</span>
+<span class="nc" id="L218">        vStB.append(&quot;{&quot;)</span>
+<span class="nc" id="L219">            .append(&quot;id=&quot;).append(id)</span>
+<span class="nc" id="L220">            .append(vSEP).append(&quot;journal=&quot;).append(journal)</span>
+<span class="nc" id="L221">            .append(vSEP).append(&quot;reference='&quot;).append(reference).append('\'')</span>
+<span class="nc" id="L222">            .append(vSEP).append(&quot;date=&quot;).append(date)</span>
+<span class="nc" id="L223">            .append(vSEP).append(&quot;libelle='&quot;).append(libelle).append('\'')</span>
+<span class="nc" id="L224">            .append(vSEP).append(&quot;totalDebit=&quot;).append(this.getTotalDebit().toPlainString())</span>
+<span class="nc" id="L225">            .append(vSEP).append(&quot;totalCredit=&quot;).append(this.getTotalCredit().toPlainString())</span>
+<span class="nc" id="L226">            .append(vSEP).append(&quot;listLigneEcriture=[\n&quot;)</span>
+<span class="nc" id="L227">            .append(StringUtils.join(listLigneEcriture, &quot;\n&quot;)).append(&quot;\n]&quot;)</span>
+<span class="nc" id="L228">            .append(&quot;}&quot;);</span>
+<span class="nc" id="L229">        return vStB.toString();</span>
+    }
+
+    @Override
+    public boolean equals(Object o) {
+<span class="pc bpc" id="L234" title="1 of 2 branches missed.">        if (this == o) return true;</span>
+<span class="pc bpc" id="L235" title="2 of 4 branches missed.">        if (o == null || getClass() != o.getClass()) return false;</span>
+
+<span class="fc" id="L237">        EcritureComptable that = (EcritureComptable) o;</span>
+
+<span class="fc bfc" id="L239" title="All 2 branches covered.">        if (!id.equals(that.id)) return false;</span>
+<span class="fc" id="L240">        return libelle.equals(that.libelle);</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L245">        int result = id.hashCode();</span>
+<span class="nc" id="L246">        result = 31 * result + libelle.hashCode();</span>
+<span class="nc" id="L247">        return result;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

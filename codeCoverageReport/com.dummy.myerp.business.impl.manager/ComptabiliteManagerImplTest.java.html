@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ComptabiliteManagerImplTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">myerp$All_in_myerp.exec</a> &gt; <a href="index.source.html" class="el_package">com.dummy.myerp.business.impl.manager</a> &gt; <span class="el_source">ComptabiliteManagerImplTest.java</span></div><h1>ComptabiliteManagerImplTest.java</h1><pre class="source lang-java linenums">package com.dummy.myerp.business.impl.manager;
+
+import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+
+import com.dummy.myerp.SpringRegistry;
+import com.dummy.myerp.consumer.dao.impl.db.dao.ComptabiliteDaoImpl;
+import com.dummy.myerp.model.bean.comptabilite.*;
+import com.dummy.myerp.model.exceptions.EmptyStringException;
+import com.dummy.myerp.model.exceptions.StringSizeTooBigException;
+import com.dummy.myerp.technical.exception.FunctionalException;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@ExtendWith(MockitoExtension.class)
+<span class="fc" id="L26">class ComptabiliteManagerImplTest {</span>
+
+    private static EcritureComptable testEcritureComptable;
+
+    @Mock
+    private ComptabiliteDaoImpl cDao;
+    @Mock
+    private List&lt;CompteComptable&gt; compteComptableMockedList;
+    @Mock
+    private List&lt;JournalComptable&gt; journalComptableMockedList;
+<span class="fc" id="L36">    @InjectMocks</span>
+    private final ComptabiliteManagerImpl managerUnderTest = new ComptabiliteManagerImpl();;
+
+
+    @BeforeAll
+    static void initContext() throws EmptyStringException, StringSizeTooBigException, FunctionalException {
+<span class="fc" id="L42">        SpringRegistry.init();</span>
+<span class="fc" id="L43">        testEcritureComptable = new EcritureComptable.Builder()</span>
+<span class="fc" id="L44">                .Id(6)</span>
+<span class="fc" id="L45">                .journal(new JournalComptable(&quot;AC&quot;, &quot;Achat&quot;))</span>
+<span class="fc" id="L46">                .date(new Date())</span>
+<span class="fc" id="L47">                .libelle(&quot;test&quot;)</span>
+<span class="fc" id="L48">                .build();</span>
+<span class="fc" id="L49">        testEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(706, &quot;test&quot;),</span>
+                &quot;test&quot;, new BigDecimal(123),
+                new BigDecimal(123)));
+<span class="fc" id="L52">        testEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(706, &quot;test&quot;),</span>
+                &quot;test&quot;,  new BigDecimal(1234),
+                new BigDecimal(1234)));
+<span class="fc" id="L55">    }</span>
+
+    @BeforeEach
+    @Tag(&quot;Integration&quot;)
+    void init() throws EmptyStringException, StringSizeTooBigException, FunctionalException {
+
+<span class="fc" id="L61">    }</span>
+
+    @AfterEach
+    void unRef() {
+        //testEcritureComptable = null;
+<span class="fc" id="L66">    }</span>
+
+    @AfterAll
+    static void GlobalUnref() {
+<span class="fc" id="L70">        testEcritureComptable = null;</span>
+<span class="fc" id="L71">    }</span>
+
+    @Test
+    void checkEcritureComptableUnit_Libelle() throws Exception {
+        EcritureComptable vEcritureComptable;
+
+<span class="fc" id="L77">        vEcritureComptable = new EcritureComptable.Builder()</span>
+<span class="fc" id="L78">                .Id(-6)</span>
+<span class="fc" id="L79">                .journal(new JournalComptable(&quot;AC&quot;, &quot;Achat&quot;))</span>
+<span class="fc" id="L80">                .date(new Date())</span>
+<span class="fc" id="L81">                .libelle(&quot;&quot;)</span>
+<span class="fc" id="L82">                .build();</span>
+<span class="fc" id="L83">        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),</span>
+                                                                                 null, new BigDecimal(123),
+                                                                                 null));
+<span class="fc" id="L86">        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),</span>
+                                                                                 null, null,
+                                                                                    new BigDecimal(123)));
+<span class="fc" id="L89">        assertThrows(FunctionalException.class, () -&gt; {</span>
+<span class="nc" id="L90">            managerUnderTest.checkEcritureComptableUnit(vEcritureComptable);</span>
+<span class="nc" id="L91">        });</span>
+
+<span class="fc" id="L93">    }</span>
+
+    @Test
+     void checkEcritureComptableUnit_IsParamDateValid() throws Exception {
+<span class="fc" id="L97">        assertThrows(FunctionalException.class, () -&gt; {</span>
+<span class="fc" id="L98">            EcritureComptable vEcritureComptable = new EcritureComptable.Builder()</span>
+<span class="fc" id="L99">                    .journal(new JournalComptable(&quot;AC&quot;, &quot;Achat&quot;))</span>
+<span class="fc" id="L100">                    .date(null)</span>
+<span class="fc" id="L101">                    .libelle(&quot;test&quot;)</span>
+<span class="nc" id="L102">                    .build();</span>
+<span class="nc" id="L103">        });</span>
+<span class="fc" id="L104">    }</span>
+
+    @Test
+     void checkEcritureComptableUnit_CheckDateStandard() throws Exception {
+        EcritureComptable vEcritureComptable;
+
+<span class="fc" id="L110">        vEcritureComptable = new EcritureComptable.Builder()</span>
+<span class="fc" id="L111">                .Id(-7)</span>
+<span class="fc" id="L112">                .journal(new JournalComptable(&quot;AC&quot;, &quot;Achat&quot;))</span>
+<span class="fc" id="L113">                .date(new Date())</span>
+<span class="fc" id="L114">                .libelle(&quot;test&quot;)</span>
+<span class="fc" id="L115">                .build();</span>
+<span class="fc" id="L116">        Calendar cal = Calendar.getInstance();</span>
+<span class="fc" id="L117">        cal.setTime(vEcritureComptable.getDate());</span>
+<span class="fc" id="L118">        assertThat(cal.get(Calendar.YEAR)).isEqualTo(Integer.parseInt(vEcritureComptable.getReference().substring(3, 7)));</span>
+<span class="fc" id="L119">    }</span>
+
+    @Test
+     void checkEcritureComptableUnit_Journal() throws Exception {
+<span class="fc" id="L123">        assertThrows(FunctionalException.class, () -&gt; {</span>
+<span class="fc" id="L124">            EcritureComptable vEcritureComptable = new EcritureComptable.Builder()</span>
+<span class="fc" id="L125">                    .journal(null)</span>
+<span class="fc" id="L126">                    .date(new Date())</span>
+<span class="fc" id="L127">                    .libelle(&quot;test&quot;)</span>
+<span class="nc" id="L128">                    .build();</span>
+<span class="nc" id="L129">        });</span>
+<span class="fc" id="L130">    }</span>
+
+    @Test
+     void checkEcritureComptableUnitViolation() throws Exception {
+        EcritureComptable vEcritureComptable;
+<span class="fc" id="L135">        vEcritureComptable = new EcritureComptable.Builder().date(new Date())</span>
+<span class="fc" id="L136">                .Id(-5)</span>
+<span class="fc" id="L137">                .journal(new JournalComptable(&quot;AC&quot;, &quot;Des stylos pour gérard&quot;))</span>
+<span class="fc" id="L138">                .build();</span>
+<span class="fc" id="L139">        assertThrows(FunctionalException.class, ()-&gt; {</span>
+<span class="nc" id="L140">            managerUnderTest.checkEcritureComptableUnit(vEcritureComptable);</span>
+<span class="nc" id="L141">        });</span>
+<span class="fc" id="L142">    }</span>
+
+
+    @Test
+     void checkEcritureComptableUnitRG2() throws Exception {
+<span class="fc" id="L147">        EcritureComptable vEcritureComptable = new EcritureComptable.Builder()</span>
+<span class="fc" id="L148">                .Id(-5)</span>
+<span class="fc" id="L149">                .journal(new JournalComptable(&quot;AC&quot;, &quot;Achat&quot;))</span>
+<span class="fc" id="L150">                .date(new Date())</span>
+<span class="fc" id="L151">                .libelle(&quot;Libelle&quot;)</span>
+<span class="fc" id="L152">                .build();</span>
+
+<span class="fc" id="L154">        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),</span>
+                                                                                 null, new BigDecimal(123),
+                                                                                 null));
+<span class="fc" id="L157">        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),</span>
+                                                                                 null, null,
+                                                                                 new BigDecimal(1234)));
+<span class="fc" id="L160">        assertThrows(FunctionalException.class, () -&gt; {</span>
+<span class="nc" id="L161">            managerUnderTest.checkEcritureComptableUnit(vEcritureComptable);</span>
+<span class="nc" id="L162">        });</span>
+<span class="fc" id="L163">    }</span>
+
+    @Test
+     void checkEcritureComptableUnitRG3() throws Exception {
+<span class="fc" id="L167">        EcritureComptable vEcritureComptable = new EcritureComptable.Builder()</span>
+<span class="fc" id="L168">                .Id(-5)</span>
+<span class="fc" id="L169">                .journal(new JournalComptable(&quot;AC&quot;, &quot;Achat&quot;))</span>
+<span class="fc" id="L170">                .date(new Date())</span>
+<span class="fc" id="L171">                .libelle(&quot;Libelle&quot;)</span>
+<span class="fc" id="L172">                .build();</span>
+
+<span class="fc" id="L174">        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),</span>
+                                                                                 null, new BigDecimal(123),
+                                                                                 null));
+<span class="fc" id="L177">        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),</span>
+                                                                                 null, new BigDecimal(123),
+                                                                                 null));
+<span class="fc" id="L180">        assertThrows(FunctionalException.class, () -&gt; {</span>
+<span class="nc" id="L181">            managerUnderTest.checkEcritureComptableUnit(vEcritureComptable);</span>
+<span class="nc" id="L182">        });</span>
+<span class="fc" id="L183">    }</span>
+
+
+    @Test
+     void checkEcritureComptableUnitRG4() throws Exception {
+<span class="fc" id="L188">        EcritureComptable vEcritureComptable = new EcritureComptable.Builder()</span>
+<span class="fc" id="L189">                .Id(1)</span>
+<span class="fc" id="L190">                .journal(new JournalComptable(&quot;AC&quot;, &quot;Achat&quot;))</span>
+<span class="fc" id="L191">                .date(new Date())</span>
+<span class="fc" id="L192">                .libelle(&quot;Libelle&quot;)</span>
+<span class="fc" id="L193">                .build();</span>
+<span class="fc" id="L194">        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),</span>
+                &quot;test&quot;, new BigDecimal(123),
+                new BigDecimal(123)));
+<span class="fc" id="L197">        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),</span>
+                &quot;test&quot;,  new BigDecimal(1234),
+                new BigDecimal(1234)));
+<span class="fc" id="L200">        assertDoesNotThrow(()-&gt; {</span>
+<span class="fc" id="L201">           managerUnderTest.checkEcritureComptableUnit(vEcritureComptable);</span>
+<span class="fc" id="L202">        });</span>
+<span class="fc" id="L203">    }</span>
+
+    @Test
+     void checkEcritureComptableUnitRG5() throws Exception {
+<span class="fc" id="L207">        EcritureComptable vEcritureComptable = new EcritureComptable.Builder()</span>
+<span class="fc" id="L208">                .journal(new JournalComptable(&quot;BQ&quot;, &quot;Achat&quot;))</span>
+<span class="fc" id="L209">                .date(new Date())</span>
+<span class="fc" id="L210">                .libelle(&quot;Libelle&quot;)</span>
+<span class="fc" id="L211">                .Id(22)</span>
+<span class="fc" id="L212">                .build();</span>
+<span class="fc" id="L213">        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),</span>
+                &quot;test&quot;, new BigDecimal(123),
+                new BigDecimal(123)));
+<span class="fc" id="L216">        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),</span>
+                &quot;test&quot;,  new BigDecimal(1234),
+                new BigDecimal(1234)));
+<span class="fc" id="L219">        assertDoesNotThrow(()-&gt; {</span>
+<span class="fc" id="L220">            managerUnderTest.checkEcritureComptableUnit(vEcritureComptable);</span>
+<span class="fc" id="L221">        });</span>
+<span class="fc" id="L222">    }</span>
+
+    @Test
+    void getListCompteComptable_CheckBySize() {
+
+<span class="fc" id="L227">       when(compteComptableMockedList.size()).thenReturn(7);</span>
+
+<span class="fc" id="L229">        final int resultSize = managerUnderTest.getListCompteComptable().size();</span>
+<span class="fc" id="L230">        final int expectedSize = compteComptableMockedList.size();</span>
+
+<span class="fc" id="L232">        assertThat(resultSize).isEqualTo(expectedSize);</span>
+<span class="fc" id="L233">        verify(compteComptableMockedList).size();</span>
+<span class="fc" id="L234">    }</span>
+
+    @Test
+    void getListCompteComptable_CheckByNumero() {
+<span class="fc" id="L238">        when(compteComptableMockedList.get(0)).thenReturn(new CompteComptable(401));</span>
+
+<span class="fc" id="L240">        final int resultNumero = managerUnderTest.getListCompteComptable().get(0).getNumero();</span>
+<span class="fc" id="L241">        final int expectedNumero = compteComptableMockedList.get(0).getNumero();</span>
+
+<span class="fc" id="L243">        assertThat(resultNumero).isEqualTo(expectedNumero);</span>
+<span class="fc" id="L244">        verify(compteComptableMockedList).get(0);</span>
+<span class="fc" id="L245">    }</span>
+
+    @Test
+    void getListJournalComptable_CheckBySize() {
+
+<span class="fc" id="L250">        when(journalComptableMockedList.size()).thenReturn(4);</span>
+
+<span class="fc" id="L252">        final int resultSize = managerUnderTest.getListJournalComptable().size();</span>
+<span class="fc" id="L253">        final int expectedSize = journalComptableMockedList.size();</span>
+
+<span class="fc" id="L255">        assertThat(resultSize).isEqualTo(expectedSize);</span>
+<span class="fc" id="L256">        verify(journalComptableMockedList).size();</span>
+<span class="fc" id="L257">    }</span>
+
+    @Test
+    void getListJournalComptable_CheckByLibelle() throws EmptyStringException, StringSizeTooBigException {
+<span class="fc" id="L261">        when(journalComptableMockedList.get(0)).thenReturn(new JournalComptable(&quot;ac&quot;, &quot;Achat&quot;));</span>
+
+<span class="fc" id="L263">        final String resultLibelle = managerUnderTest.getListJournalComptable().get(0).getLibelle();</span>
+<span class="fc" id="L264">        final String expectedLibelle = journalComptableMockedList.get(0).getLibelle();</span>
+
+<span class="fc" id="L266">        assertThat(resultLibelle).isEqualTo(expectedLibelle);</span>
+<span class="fc" id="L267">        verify(journalComptableMockedList).get(0);</span>
+<span class="fc" id="L268">    }</span>
+
+    /*@Test
+    void getListEcritureComptable_CheckBySize() {
+        when(ecritureComptableMockedList.size()).thenReturn(ma);
+
+        final int resultSize = managerUnderTest.getListEcritureComptable().size();
+        final int expectedSize = ecritureComptableMockedList.size();
+
+        assertThat(resultSize).isEqualTo(expectedSize);
+        verify(ecritureComptableMockedList).size();
+    }*/
+
+    @Test
+    void addReference_isRequestFrom_LastValueFromYearValid() {
+<span class="fc" id="L283">        when(cDao.getLastFromSpecificYearSequenceEcritureComptable(2016)).thenReturn(88);</span>
+
+<span class="fc" id="L285">        final int result = managerUnderTest.getLastFromSpecificYearSequenceEcritureComptable(2016);</span>
+<span class="fc" id="L286">        final int expected = cDao.getLastFromSpecificYearSequenceEcritureComptable(2016);</span>
+
+<span class="fc" id="L288">        assertThat(result).isEqualTo(expected);</span>
+        // verify that the behavior happened
+<span class="fc" id="L290">        verify(cDao).getLastFromSpecificYearSequenceEcritureComptable(2016);</span>
+<span class="fc" id="L291">    }</span>
+
+    @Test
+    void checkEcritureComptable() throws EmptyStringException, StringSizeTooBigException, FunctionalException {
+<span class="fc" id="L295">        EcritureComptable vEcritureComptable = new EcritureComptable.Builder()</span>
+<span class="fc" id="L296">                .Id(11)</span>
+<span class="fc" id="L297">                .journal(new JournalComptable(&quot;AC&quot;, &quot;Achat&quot;))</span>
+<span class="fc" id="L298">                .date(new Date())</span>
+<span class="fc" id="L299">                .libelle(&quot;des stylos&quot;)</span>
+<span class="fc" id="L300">                .build();</span>
+<span class="fc" id="L301">        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),</span>
+                null, new BigDecimal(123),
+                new BigDecimal(123)));
+<span class="fc" id="L304">        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),</span>
+                null,  new BigDecimal(1234),
+                new BigDecimal(1234)));
+
+<span class="fc" id="L308">        assertDoesNotThrow(()-&gt; {</span>
+<span class="fc" id="L309">            managerUnderTest.checkEcritureComptable(vEcritureComptable);</span>
+<span class="fc" id="L310">        });</span>
+<span class="fc" id="L311">    }</span>
+
+    @Test
+    void checkEcritureComptable_Exception() throws EmptyStringException, StringSizeTooBigException, FunctionalException {
+<span class="fc" id="L315">        EcritureComptable vEcritureComptable = new EcritureComptable.Builder()</span>
+<span class="fc" id="L316">                .Id(11)</span>
+<span class="fc" id="L317">                .journal(new JournalComptable(&quot;AC&quot;, &quot;Achat&quot;))</span>
+<span class="fc" id="L318">                .date(new Date())</span>
+<span class="fc" id="L319">                .libelle(&quot;&quot;) // empty</span>
+<span class="fc" id="L320">                .build();</span>
+<span class="fc" id="L321">        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),</span>
+                null, new BigDecimal(123),
+                new BigDecimal(123)));
+<span class="fc" id="L324">        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),</span>
+                null,  new BigDecimal(1234),
+                new BigDecimal(1234)));
+
+<span class="fc" id="L328">        assertThrows(Exception.class, () -&gt; {</span>
+<span class="nc" id="L329">           managerUnderTest.checkEcritureComptable(vEcritureComptable);</span>
+<span class="nc" id="L330">        });</span>
+<span class="fc" id="L331">    }</span>
+
+    @Test
+    void checkEcritureComptableContext_IfEcritureExists() throws EmptyStringException, StringSizeTooBigException, FunctionalException {
+<span class="fc" id="L335">        Calendar date = Calendar.getInstance();</span>
+<span class="fc" id="L336">        date.set(2016, Calendar.DECEMBER, 31);</span>
+<span class="fc" id="L337">        Date specificDate = date.getTime();</span>
+
+<span class="fc" id="L339">        EcritureComptable vEcritureComptable = new EcritureComptable.Builder()</span>
+<span class="fc" id="L340">                .Id(-1)</span>
+<span class="fc" id="L341">                .journal(new JournalComptable(&quot;AC&quot;, &quot;Achat&quot;))</span>
+<span class="fc" id="L342">                .date(specificDate)</span>
+<span class="fc" id="L343">                .libelle(&quot;Cartouches d'imprimante&quot;) // em</span>
+<span class="fc" id="L344">                .build();</span>
+<span class="fc" id="L345">        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),</span>
+                null, new BigDecimal(123),
+                new BigDecimal(123)));
+<span class="fc" id="L348">        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),</span>
+                null,  new BigDecimal(1234),
+                new BigDecimal(1234)));
+<span class="fc" id="L351">        assertThrows(Exception.class, ()-&gt;{</span>
+<span class="nc" id="L352">            managerUnderTest.checkEcritureComptableContext(vEcritureComptable);</span>
+<span class="nc" id="L353">        });</span>
+<span class="fc" id="L354">    }</span>
+
+    @Test
+    @Order(1)
+    @Tag(&quot;Integration&quot;)
+    void insertEcritureComptable() throws FunctionalException, EmptyStringException, StringSizeTooBigException {
+<span class="fc" id="L360">        managerUnderTest.insertEcritureComptable(testEcritureComptable);</span>
+<span class="fc" id="L361">        assertThat(managerUnderTest.getListEcritureComptable().contains(testEcritureComptable)).isTrue();</span>
+<span class="fc" id="L362">    }</span>
+
+    @Test
+    @Order(2)
+    @Tag(&quot;Integration&quot;)
+    void updateEcritureComptable() throws FunctionalException {
+<span class="fc" id="L368">        testEcritureComptable.setLibelle(&quot;Ceci est un libelle de test pour la methode update&quot;);</span>
+<span class="fc" id="L369">        managerUnderTest.updateEcritureComptable(testEcritureComptable);</span>
+<span class="fc" id="L370">        assertThat(managerUnderTest.getListEcritureComptable().contains(testEcritureComptable)).isTrue();</span>
+<span class="fc" id="L371">        assertThat(testEcritureComptable.getLibelle()).isEqualTo(&quot;Ceci est un libelle de test pour la methode update&quot;);</span>
+<span class="fc" id="L372">    }</span>
+
+    @Test
+    @Order(4)
+    @Tag(&quot;Integration&quot;)
+    void deleteEcritureComptable() {
+
+<span class="fc" id="L379">        managerUnderTest.deleteEcritureComptable(testEcritureComptable.getId());</span>
+<span class="fc" id="L380">        assertThat(managerUnderTest.getListEcritureComptable().contains(testEcritureComptable)).isFalse();</span>
+<span class="fc" id="L381">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

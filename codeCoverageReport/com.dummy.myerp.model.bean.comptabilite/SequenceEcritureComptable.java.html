@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SequenceEcritureComptable.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">myerp$All_in_myerp.exec</a> &gt; <a href="index.source.html" class="el_package">com.dummy.myerp.model.bean.comptabilite</a> &gt; <span class="el_source">SequenceEcritureComptable.java</span></div><h1>SequenceEcritureComptable.java</h1><pre class="source lang-java linenums">package com.dummy.myerp.model.bean.comptabilite;
+
+
+import com.dummy.myerp.model.exceptions.InvalidYearException;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
+
+/**
+ * Bean représentant une séquence pour les références d'écriture comptable
+ */
+public class SequenceEcritureComptable {
+
+    // ==================== Attributs ====================
+    /** L'année */
+    private Integer annee;
+    /** La dernière valeur utilisée */
+    private Integer derniereValeur;
+
+    // ==================== Constructeurs ====================
+    /**
+     * Constructeur
+     */
+<span class="fc" id="L26">    public SequenceEcritureComptable() {</span>
+<span class="fc" id="L27">    }</span>
+
+    /**
+     * Constructeur
+     *
+     * @param pAnnee -
+     * @param pDerniereValeur -
+     * @throws InvalidYearException Une exception lorsque la condition n'est pas atteinte.
+     */
+<span class="fc" id="L36">    public SequenceEcritureComptable(Integer pAnnee, Integer pDerniereValeur) throws InvalidYearException {</span>
+<span class="fc" id="L37">        annee = checkYear(pAnnee);</span>
+<span class="fc" id="L38">        derniereValeur = pDerniereValeur;</span>
+<span class="fc" id="L39">    }</span>
+
+
+    // ==================== Getters/Setters ====================
+    public Integer getAnnee() {
+<span class="fc" id="L44">        return annee;</span>
+    }
+    public void setAnnee(Integer pAnnee) throws InvalidYearException {
+<span class="fc" id="L47">        annee = checkYear(pAnnee);</span>
+<span class="fc" id="L48">    }</span>
+    public Integer getDerniereValeur() {
+<span class="fc" id="L50">        return derniereValeur;</span>
+    }
+    public void setDerniereValeur(Integer pDerniereValeur) {
+<span class="fc" id="L53">        derniereValeur = pDerniereValeur;</span>
+<span class="fc" id="L54">    }</span>
+
+
+    // ==================== Méthodes ====================
+    @Override
+    public String toString() {
+<span class="fc" id="L60">        final StringBuilder vStB = new StringBuilder(this.getClass().getSimpleName());</span>
+<span class="fc" id="L61">        final String vSEP = &quot;, &quot;;</span>
+<span class="fc" id="L62">        vStB.append(&quot;{&quot;)</span>
+<span class="fc" id="L63">            .append(&quot;annee=&quot;).append(annee)</span>
+<span class="fc" id="L64">            .append(vSEP).append(&quot;derniereValeur=&quot;).append(derniereValeur)</span>
+<span class="fc" id="L65">            .append(&quot;}&quot;);</span>
+<span class="fc" id="L66">        return vStB.toString();</span>
+    }
+
+    public Integer checkYear(int year) throws InvalidYearException {
+<span class="fc" id="L70">        Date actualDate = new Date();</span>
+<span class="fc" id="L71">        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(&quot;Europe/Paris&quot;));</span>
+<span class="fc" id="L72">        calendar.setTime(actualDate);</span>
+
+<span class="fc bfc" id="L74" title="All 2 branches covered.">        if (year &gt; calendar.get(Calendar.YEAR)) throw new InvalidYearException(&quot;The year provided is in the future, which is impossible.&quot;);</span>
+
+<span class="fc" id="L76">        return year;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

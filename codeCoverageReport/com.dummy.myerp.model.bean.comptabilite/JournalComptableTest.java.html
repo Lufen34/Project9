@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JournalComptableTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">myerp$All_in_myerp.exec</a> &gt; <a href="index.source.html" class="el_package">com.dummy.myerp.model.bean.comptabilite</a> &gt; <span class="el_source">JournalComptableTest.java</span></div><h1>JournalComptableTest.java</h1><pre class="source lang-java linenums">package com.dummy.myerp.model.bean.comptabilite;
+
+import com.dummy.myerp.model.exceptions.EmptyStringException;
+import com.dummy.myerp.model.exceptions.StringSizeTooBigException;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
+
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+<span class="fc" id="L16">class JournalComptableTest {</span>
+
+    private JournalComptable journal;
+    private List&lt;JournalComptable&gt; journalList;
+
+    @BeforeAll
+    void init_List() {
+<span class="fc" id="L23">        journalList = new ArrayList&lt;&gt;();</span>
+        try {
+<span class="fc" id="L25">            journalList.add(new JournalComptable(&quot;1234&quot;, &quot;test&quot;));</span>
+<span class="fc" id="L26">            journalList.add(new JournalComptable(&quot;2345&quot;, &quot;test&quot;));</span>
+<span class="fc" id="L27">            journalList.add(new JournalComptable(&quot;3456&quot;, &quot;test&quot;));</span>
+<span class="fc" id="L28">            journalList.add(new JournalComptable(&quot;4567&quot;, &quot;test&quot;));</span>
+<span class="nc" id="L29">        } catch (StringSizeTooBigException | EmptyStringException e) {</span>
+<span class="nc" id="L30">            e.printStackTrace();</span>
+<span class="fc" id="L31">        }</span>
+<span class="fc" id="L32">    }</span>
+
+    @BeforeEach
+    void init_journal(){
+        try {
+<span class="fc" id="L37">            journal = new JournalComptable(&quot;12543&quot;, &quot;test&quot;);</span>
+<span class="nc" id="L38">        } catch (StringSizeTooBigException | EmptyStringException e) {</span>
+<span class="nc" id="L39">            e.printStackTrace();</span>
+<span class="fc" id="L40">        }</span>
+<span class="fc" id="L41">    }</span>
+
+    @AfterEach
+    void unRef(){
+<span class="fc" id="L45">        journal = null;</span>
+<span class="fc" id="L46">    }</span>
+
+    @Test
+    void getCode() {
+<span class="fc" id="L50">        assertThat(journal.getCode()).isEqualTo(&quot;12543&quot;);</span>
+        try {
+<span class="fc" id="L52">            journal = new JournalComptable(&quot;19&quot;, &quot;test&quot;);</span>
+<span class="nc" id="L53">        } catch (StringSizeTooBigException | EmptyStringException e) {</span>
+<span class="nc" id="L54">            e.printStackTrace();</span>
+<span class="fc" id="L55">        }</span>
+<span class="fc" id="L56">        assertThat(journal.getCode()).isEqualTo(&quot;19&quot;);</span>
+        try {
+<span class="fc" id="L58">            journal = new JournalComptable(&quot;125&quot;, &quot;test&quot;);</span>
+<span class="nc" id="L59">        } catch (StringSizeTooBigException | EmptyStringException e) {</span>
+<span class="nc" id="L60">            e.printStackTrace();</span>
+<span class="fc" id="L61">        }</span>
+<span class="fc" id="L62">        assertThat(journal.getCode()).isEqualTo(&quot;125&quot;);</span>
+        try {
+<span class="fc" id="L64">            journal = new JournalComptable(&quot;1&quot;, &quot;test&quot;);</span>
+<span class="nc" id="L65">        } catch (StringSizeTooBigException | EmptyStringException e) {</span>
+<span class="nc" id="L66">            e.printStackTrace();</span>
+<span class="fc" id="L67">        }</span>
+<span class="fc" id="L68">        assertThat(journal.getCode()).isEqualTo(&quot;1&quot;);</span>
+<span class="fc" id="L69">    }</span>
+
+    @Test
+    void getCode_NotTooBig(){
+<span class="fc" id="L73">        StringSizeTooBigException e = assertThrows(StringSizeTooBigException.class, ()-&gt;</span>
+<span class="nc" id="L74">                    journal = new JournalComptable(&quot;11414464&quot;, &quot;test&quot;)</span>
+                );
+<span class="fc" id="L76">        assertThat(e.getMessage()).contains(&quot;Code length is superior to 5 value.&quot;);</span>
+<span class="fc" id="L77">    }</span>
+
+    @Test
+    void getCode_IsCodeNotEmpty(){
+<span class="fc" id="L81">        EmptyStringException e = assertThrows(EmptyStringException.class, ()-&gt;</span>
+<span class="nc" id="L82">                journal = new JournalComptable(&quot;&quot;, &quot;test&quot;)</span>
+        );
+<span class="fc" id="L84">        assertThat(e.getMessage()).contains(&quot;Code length is empty ensure that you have at least 1 character.&quot;);</span>
+<span class="fc" id="L85">    }</span>
+
+    @Test
+    void setCode_NotTooBig() {
+<span class="fc" id="L89">        StringSizeTooBigException e = assertThrows(StringSizeTooBigException.class, ()-&gt;</span>
+<span class="nc" id="L90">                journal.setCode(&quot;123456&quot;)</span>
+        );
+<span class="fc" id="L92">        assertThat(e.getMessage()).contains(&quot;Code length is superior to 5 value.&quot;);</span>
+<span class="fc" id="L93">    }</span>
+
+    @Test
+    void setCode_IsNotEmpty() {
+<span class="fc" id="L97">        EmptyStringException e = assertThrows(EmptyStringException.class, ()-&gt;</span>
+<span class="nc" id="L98">                journal.setCode(&quot;&quot;)</span>
+        );
+<span class="fc" id="L100">        assertThat(e.getMessage()).contains(&quot;Code length is empty ensure that you have at least 1 character.&quot;);</span>
+<span class="fc" id="L101">    }</span>
+
+    @Test
+    void getLibelle() {
+<span class="fc" id="L105">        assertThat(journal.getLibelle()).isEqualTo(&quot;test&quot;);</span>
+<span class="fc" id="L106">    }</span>
+
+    @Test
+    void getLibelle_NotTooBig(){
+<span class="fc" id="L110">        StringSizeTooBigException e = assertThrows(StringSizeTooBigException.class, ()-&gt;</span>
+<span class="nc" id="L111">                journal = new JournalComptable(&quot;1141&quot;, &quot;testezfffffffffffffffffffffffffffffffffffffffffffffffffzefezfz&quot; +</span>
+                        &quot;efzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzfezzzzzzzzzzzzzzzzzzzzzzzzzefz&quot;+
+                        &quot;fezzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz&quot;+
+                        &quot;efzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz&quot;+
+                        &quot;fezzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz&quot;+
+                        &quot;fezzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz&quot;+
+                        &quot;fezzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz&quot;+
+                        &quot;fezzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz&quot;+
+                        &quot;fezzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz&quot;+
+                        &quot;fezzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz&quot;+
+                        &quot;fezzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz&quot;+
+                        &quot;fezzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz&quot;+
+                        &quot;fezzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz&quot;+
+                        &quot;fezzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz&quot;+
+                        &quot;fezzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz&quot;+
+                        &quot;fezzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz&quot;)
+        );
+<span class="fc" id="L128">        assertThat(e.getMessage()).contains(&quot;libelle length is superior to max length(150).&quot;);</span>
+<span class="fc" id="L129">    }</span>
+
+    @Test
+    void getLibelle_IsNotEmpty(){
+<span class="fc" id="L133">        EmptyStringException e = assertThrows(EmptyStringException.class, ()-&gt;</span>
+<span class="nc" id="L134">                journal = new JournalComptable(&quot;124&quot;, &quot;&quot;)</span>
+        );
+<span class="fc" id="L136">        assertThat(e.getMessage()).contains(&quot;libelle length is empty ensure that you have at least 1 character.&quot;);</span>
+<span class="fc" id="L137">    }</span>
+
+    @Test
+    void setLibelle() {
+        try {
+<span class="fc" id="L142">            journal.setLibelle(&quot;1234&quot;);</span>
+<span class="nc" id="L143">        } catch (EmptyStringException | StringSizeTooBigException e) {</span>
+<span class="nc" id="L144">            e.printStackTrace();</span>
+<span class="fc" id="L145">        }</span>
+<span class="fc" id="L146">        assertThat(journal.getLibelle()).isEqualTo(&quot;1234&quot;);</span>
+<span class="fc" id="L147">    }</span>
+
+    @Test
+    void setLibelle_NotTooBig() {
+<span class="fc" id="L151">        StringSizeTooBigException e = assertThrows(StringSizeTooBigException.class, ()-&gt;</span>
+<span class="nc" id="L152">                journal.setLibelle(&quot;testezfffffffffffffffffffffffffffffffffffffffffffffffffzefezfz&quot; +</span>
+                                &quot;efzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzfezzzzzzzzzzzzzzzzzzzzzzzzzefz&quot;+
+                                &quot;fezzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz&quot;+
+                                &quot;efzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz&quot;+
+                                &quot;fezzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz&quot;+
+                                &quot;fezzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz&quot;+
+                                &quot;fezzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz&quot;+
+                                &quot;fezzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz&quot;+
+                                &quot;fezzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz&quot;+
+                                &quot;fezzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz&quot;+
+                                &quot;fezzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz&quot;+
+                                &quot;fezzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz&quot;+
+                                &quot;fezzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz&quot;+
+                                &quot;fezzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz&quot;+
+                                &quot;fezzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz&quot;+
+                                &quot;fezzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz&quot;)
+        );
+<span class="fc" id="L169">        assertThat(e.getMessage()).contains(&quot;libelle length is superior to max length(150).&quot;);</span>
+<span class="fc" id="L170">    }</span>
+
+    @Test
+    void getByCode() {
+<span class="fc" id="L174">        assertThat(JournalComptable.getByCode(journalList, &quot;1234&quot;).toString()).hasToString(journalList.get(0).toString());</span>
+<span class="fc" id="L175">        assertThat(JournalComptable.getByCode(journalList, &quot;2345&quot;).toString()).hasToString(journalList.get(1).toString());</span>
+<span class="fc" id="L176">        assertThat(JournalComptable.getByCode(journalList, &quot;3456&quot;).toString()).hasToString(journalList.get(2).toString());</span>
+<span class="fc" id="L177">        assertThat(JournalComptable.getByCode(journalList, &quot;4567&quot;).toString()).hasToString(journalList.get(3).toString());</span>
+<span class="fc" id="L178">        assertThat(JournalComptable.getByCode(journalList, &quot;5678&quot;)).isNull();</span>
+<span class="fc" id="L179">        assertThat(JournalComptable.getByCode(journalList, &quot;6789&quot;)).isNull();</span>
+
+<span class="fc" id="L181">    }</span>
+
+    @ParameterizedTest
+    @ValueSource(ints = {1, 4, 33, 11, 22})
+    void getByCode_IfListIsNull_ThrowIndexOutOfBoundsException(int arg){
+<span class="fc" id="L186">        List&lt;JournalComptable&gt; listTestNull = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L187">        IndexOutOfBoundsException e = assertThrows(IndexOutOfBoundsException.class, ()-&gt;</span>
+<span class="nc" id="L188">                listTestNull.get(arg)</span>
+        );
+<span class="fc" id="L190">        assertThat(e.getMessage()).isEqualTo(&quot;Index &quot; + arg + &quot; out of bounds for length 0&quot;);</span>
+<span class="fc" id="L191">    }</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

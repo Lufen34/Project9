@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ComptabiliteDaoImplTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">myerp$All_in_myerp.exec</a> &gt; <a href="index.source.html" class="el_package">com.dummy.myerp.consumer.dao.impl.db.dao</a> &gt; <span class="el_source">ComptabiliteDaoImplTest.java</span></div><h1>ComptabiliteDaoImplTest.java</h1><pre class="source lang-java linenums">package com.dummy.myerp.consumer.dao.impl.db.dao;
+
+import com.dummy.myerp.SpringRegistry;
+import com.dummy.myerp.model.bean.comptabilite.*;
+import com.dummy.myerp.model.exceptions.EmptyStringException;
+import com.dummy.myerp.model.exceptions.InvalidYearException;
+import com.dummy.myerp.model.exceptions.StringSizeTooBigException;
+import com.dummy.myerp.technical.exception.FunctionalException;
+import com.dummy.myerp.technical.exception.NotFoundException;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+<span class="fc" id="L21">class ComptabiliteDaoImplTest {</span>
+
+
+    private ComptabiliteDaoImpl comptabiliteDaoUnderTest;
+
+    private static EcritureComptable testEcritureComptable;
+
+    private static EcritureComptable testLigneEcritureComptable;
+
+    private static SequenceEcritureComptable testSequenceEcritureComptable;
+
+    @BeforeAll
+    static void contextInit() throws EmptyStringException, StringSizeTooBigException, FunctionalException, InvalidYearException {
+<span class="fc" id="L34">        SpringRegistry.init();</span>
+<span class="fc" id="L35">        testEcritureComptable = new EcritureComptable.Builder()</span>
+<span class="fc" id="L36">                .Id(-4)</span>
+<span class="fc" id="L37">                .journal(new JournalComptable(&quot;AC&quot;, &quot;Achat&quot;))</span>
+<span class="fc" id="L38">                .date(new Date())</span>
+<span class="fc" id="L39">                .libelle(&quot;test&quot;)</span>
+<span class="fc" id="L40">                .build();</span>
+<span class="fc" id="L41">        testEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(706, &quot;test&quot;),</span>
+                &quot;test&quot;, new BigDecimal(123),
+                new BigDecimal(123)));
+<span class="fc" id="L44">        testEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(706, &quot;test&quot;),</span>
+                &quot;test&quot;,  new BigDecimal(1234),
+                new BigDecimal(1234)));
+
+<span class="fc" id="L48">        testLigneEcritureComptable = new EcritureComptable.Builder()</span>
+<span class="fc" id="L49">                .Id(-99)</span>
+<span class="fc" id="L50">                .journal(new JournalComptable(&quot;AC&quot;, &quot;Achat&quot;))</span>
+<span class="fc" id="L51">                .date(new Date())</span>
+<span class="fc" id="L52">                .libelle(&quot;test&quot;)</span>
+<span class="fc" id="L53">                .build();</span>
+<span class="fc" id="L54">        testLigneEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(706, &quot;test&quot;),</span>
+                &quot;test&quot;, new BigDecimal(123),
+                new BigDecimal(123)));
+<span class="fc" id="L57">        testLigneEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(706, &quot;test&quot;),</span>
+                &quot;test&quot;,  new BigDecimal(1234),
+                new BigDecimal(1234)));
+
+<span class="fc" id="L61">        testSequenceEcritureComptable = new SequenceEcritureComptable(2016, 999);</span>
+<span class="fc" id="L62">    }</span>
+
+    @AfterAll
+    static void unRefStatic() {
+<span class="fc" id="L66">        testSequenceEcritureComptable = null;</span>
+<span class="fc" id="L67">        testEcritureComptable = null;</span>
+<span class="fc" id="L68">        testLigneEcritureComptable = null;</span>
+<span class="fc" id="L69">    }</span>
+
+    @BeforeEach
+    void init() {
+<span class="fc" id="L73">        comptabiliteDaoUnderTest = new ComptabiliteDaoImpl();</span>
+<span class="fc" id="L74">    }</span>
+
+    @AfterEach
+    void unRef() {
+<span class="fc" id="L78">        comptabiliteDaoUnderTest = null;</span>
+<span class="fc" id="L79">    }</span>
+
+    @Test
+    void getInstance() {
+<span class="fc" id="L83">        assertThat(ComptabiliteDaoImpl.getInstance()).isNotNull();</span>
+<span class="fc" id="L84">    }</span>
+
+    @ParameterizedTest
+    @CsvSource(&quot;SELECT * FROM myerp.compte_comptable;&quot;)
+    void setSQLgetListCompteComptable(String pSQLgetListCompteComptable) {
+<span class="fc" id="L89">        String test = pSQLgetListCompteComptable;</span>
+<span class="fc" id="L90">        assertThat(test).isEqualTo(&quot;SELECT * FROM myerp.compte_comptable;&quot;);</span>
+<span class="fc" id="L91">    }</span>
+
+    @Test
+    void getListCompteComptable() {
+<span class="fc" id="L95">        assertThat(comptabiliteDaoUnderTest.getListCompteComptable()).isNotNull();</span>
+<span class="fc" id="L96">    }</span>
+
+    @ParameterizedTest
+    @CsvSource(&quot;SELECT * FROM myerp.journal_comptable;&quot;)
+    void setSQLgetListJournalComptable(String pSQLgetListJournalComptable) {
+<span class="fc" id="L101">        String test = pSQLgetListJournalComptable;</span>
+<span class="fc" id="L102">        assertThat(test).isEqualTo(&quot;SELECT * FROM myerp.journal_comptable;&quot;);</span>
+<span class="fc" id="L103">    }</span>
+
+    @Test
+    void getListJournalComptable() {
+<span class="fc" id="L107">        assertThat(comptabiliteDaoUnderTest.getListCompteComptable()).isNotEmpty();</span>
+<span class="fc" id="L108">    }</span>
+
+    @ParameterizedTest
+    @CsvSource(&quot;SELECT * FROM myerp.ecriture_comptable;&quot;)
+    void setSQLgetListEcritureComptable(String pSQLgetListEcritureComptable) {
+<span class="fc" id="L113">        String test = pSQLgetListEcritureComptable;</span>
+<span class="fc" id="L114">        assertThat(test).isEqualTo(&quot;SELECT * FROM myerp.ecriture_comptable;&quot;);</span>
+<span class="fc" id="L115">    }</span>
+
+    @Test
+    void getListEcritureComptable() {
+<span class="fc" id="L119">        assertThat(comptabiliteDaoUnderTest.getListEcritureComptable()).isNotEmpty();</span>
+<span class="fc" id="L120">    }</span>
+
+    @ParameterizedTest
+    @CsvSource(&quot;SELECT * FROM myerp.ecriture_comptable&quot; +
+            &quot;WHERE id = :id;&quot;)
+    void setSQLgetEcritureComptable(String pSQLgetEcritureComptable) {
+<span class="fc" id="L126">        String test = pSQLgetEcritureComptable;</span>
+<span class="fc" id="L127">        assertThat(test).isEqualTo(&quot;SELECT * FROM myerp.ecriture_comptable&quot; +</span>
+&quot;WHERE id = :id;&quot;);
+<span class="fc" id="L129">    }</span>
+
+    @Test
+    @Order(1)
+    void getEcritureComptable() throws NotFoundException {
+<span class="fc" id="L134">        assertThat(comptabiliteDaoUnderTest.getEcritureComptable(-1)).isNotNull();</span>
+<span class="fc" id="L135">    }</span>
+
+    @ParameterizedTest
+    @CsvSource(&quot;SELECT * FROM myerp.ecriture_comptable&quot; +
+            &quot;WHERE reference = :reference;&quot;)
+    void setSQLgetEcritureComptableByRef(String pSQLgetEcritureComptableByRef) {
+<span class="fc" id="L141">        String test = pSQLgetEcritureComptableByRef;</span>
+<span class="fc" id="L142">        assertThat(test).isEqualTo(&quot;SELECT * FROM myerp.ecriture_comptable&quot; +</span>
+        &quot;WHERE reference = :reference;&quot;);
+<span class="fc" id="L144">    }</span>
+
+    @Test
+    void getEcritureComptableByRef() throws NotFoundException {
+<span class="fc" id="L148">        assertThat(comptabiliteDaoUnderTest.getEcritureComptableByRef(&quot;AC-2016/00001&quot;)).isNotNull();</span>
+<span class="fc" id="L149">    }</span>
+
+    @ParameterizedTest
+    @CsvSource(&quot;SELECT * FROM myerp.ligne_ecriture_comptable&quot; +
+            &quot;WHERE ecriture_id = :ecriture_id&quot; +
+            &quot;ORDER BY ligne_id&quot;)
+    void setSQLloadListLigneEcriture(String pSQLloadListLigneEcriture) {
+<span class="fc" id="L156">        String test = pSQLloadListLigneEcriture;</span>
+<span class="fc" id="L157">        assertThat(test).isEqualTo(&quot;SELECT * FROM myerp.ligne_ecriture_comptable&quot; +</span>
+        &quot;WHERE ecriture_id = :ecriture_id&quot; +
+        &quot;ORDER BY ligne_id&quot;);
+<span class="fc" id="L160">    }</span>
+
+    @ParameterizedTest
+    @ValueSource(strings = &quot;INSERT INTO myerp.ecriture_comptable (&quot; +
+            &quot;id,&quot; +
+            &quot;journal_code, reference, date, libelle&quot; +
+            &quot;) VALUES (&quot; +
+            &quot;nextval('myerp.ecriture_comptable_id_seq'),&quot; +
+            &quot;:journal_code, :reference, :date, :libelle&quot; +
+            &quot;)&quot;)
+    void setSQLinsertEcritureComptable(String pSQLinsertEcritureComptable) {
+<span class="fc" id="L171">        String test = pSQLinsertEcritureComptable;</span>
+<span class="fc" id="L172">        assertThat(test).isEqualTo(&quot;INSERT INTO myerp.ecriture_comptable (&quot; +</span>
+            &quot;id,&quot; +
+            &quot;journal_code, reference, date, libelle&quot; +
+            &quot;) VALUES (&quot; +
+            &quot;nextval('myerp.ecriture_comptable_id_seq'),&quot; +
+            &quot;:journal_code, :reference, :date, :libelle&quot; +
+            &quot;)&quot;);
+<span class="fc" id="L179">    }</span>
+
+    @Test
+    @Order(2)
+    void insertEcritureComptable() throws NotFoundException {
+<span class="fc" id="L184">        comptabiliteDaoUnderTest.insertEcritureComptable(testEcritureComptable);</span>
+<span class="fc" id="L185">        assertThat(comptabiliteDaoUnderTest.getEcritureComptable(testEcritureComptable.getId())).isNotNull();</span>
+<span class="fc" id="L186">    }</span>
+
+    @ParameterizedTest
+    @ValueSource(strings = &quot;INSERT INTO myerp.ligne_ecriture_comptable (&quot; +
+            &quot;ecriture_id, ligne_id, compte_comptable_numero, libelle, debit,&quot; +
+            &quot;credit&quot; +
+            &quot;) VALUES (&quot; +
+            &quot;:ecriture_id, :ligne_id, :compte_comptable_numero, :libelle, :debit,&quot; +
+            &quot;:credit&quot; +
+            &quot;)&quot;)
+    void setSQLinsertListLigneEcritureComptable(String pSQLinsertListLigneEcritureComptable) {
+<span class="fc" id="L197">        String test = pSQLinsertListLigneEcritureComptable;</span>
+<span class="fc" id="L198">        assertThat(test).isEqualTo(&quot;INSERT INTO myerp.ligne_ecriture_comptable (&quot; +</span>
+            &quot;ecriture_id, ligne_id, compte_comptable_numero, libelle, debit,&quot; +
+            &quot;credit&quot; +
+            &quot;) VALUES (&quot; +
+            &quot;:ecriture_id, :ligne_id, :compte_comptable_numero, :libelle, :debit,&quot; +
+            &quot;:credit&quot; +
+            &quot;)&quot;);
+<span class="fc" id="L205">    }</span>
+
+    @Test
+    @Order(4)
+    void getListLigneEcritureComptable() {
+<span class="fc" id="L210">        assertThat(comptabiliteDaoUnderTest.getListLigneEcritureComptable(testEcritureComptable.getId())).isNotEmpty();</span>
+<span class="fc" id="L211">        assertThat(comptabiliteDaoUnderTest.getListLigneEcritureComptable(testLigneEcritureComptable.getId())).isEmpty();</span>
+<span class="fc" id="L212">    }</span>
+
+    @Test
+    @Order(6)
+    void insertListLigneEcritureComptable() {
+<span class="fc" id="L217">        comptabiliteDaoUnderTest.insertEcritureComptable(testLigneEcritureComptable);</span>
+<span class="fc" id="L218">        assertThat(comptabiliteDaoUnderTest.getListLigneEcritureComptable(testLigneEcritureComptable.getId())).isNotEmpty();</span>
+<span class="fc" id="L219">    }</span>
+
+    @ParameterizedTest
+    @ValueSource(strings = &quot;UPDATE myerp.ecriture_comptable SET&quot; +
+            &quot;journal_code = :journal_code,&quot; +
+                    &quot;reference = :reference,&quot; +
+                    &quot;date = :date,&quot; +
+                    &quot;libelle = :libelle&quot; +
+                    &quot;WHERE&quot; +
+                    &quot;id = :id&quot;)
+    void setSQLupdateEcritureComptable(String pSQLupdateEcritureComptable) {
+<span class="fc" id="L230">        String test = pSQLupdateEcritureComptable;</span>
+<span class="fc" id="L231">        assertThat(test).isEqualTo(&quot;UPDATE myerp.ecriture_comptable SET&quot; +</span>
+        &quot;journal_code = :journal_code,&quot; +
+        &quot;reference = :reference,&quot; +
+        &quot;date = :date,&quot; +
+        &quot;libelle = :libelle&quot; +
+        &quot;WHERE&quot; +
+        &quot;id = :id&quot;);
+<span class="fc" id="L238">    }</span>
+
+    @Test
+    @Order(3)
+    void updateEcritureComptable() throws NotFoundException {
+<span class="fc" id="L243">        testEcritureComptable.setLibelle(&quot;This was changed after a test&quot;);</span>
+<span class="fc" id="L244">        comptabiliteDaoUnderTest.updateEcritureComptable(testEcritureComptable);</span>
+<span class="fc" id="L245">        assertThat(comptabiliteDaoUnderTest.getEcritureComptable(testEcritureComptable.getId()).getLibelle()).isEqualTo(&quot;This was changed after a test&quot;);</span>
+<span class="fc" id="L246">    }</span>
+
+    @ParameterizedTest
+    @CsvSource(&quot;DELETE FROM myerp.ecriture_comptable&quot; +
+            &quot;WHERE id = :id&quot;)
+    void setSQLdeleteEcritureComptable(String pSQLdeleteEcritureComptable) {
+<span class="fc" id="L252">        String test = pSQLdeleteEcritureComptable;</span>
+<span class="fc" id="L253">        assertThat(test).isEqualTo(&quot;DELETE FROM myerp.ecriture_comptable&quot; +</span>
+                                    &quot;WHERE id = :id&quot;);
+<span class="fc" id="L255">    }</span>
+
+    @Test
+    @Order(5)
+    void deleteEcritureComptable() throws NotFoundException {
+<span class="fc" id="L260">        comptabiliteDaoUnderTest.deleteEcritureComptable(testEcritureComptable.getId());</span>
+<span class="fc" id="L261">        assertThrows(NotFoundException.class, ()-&gt; {</span>
+<span class="nc" id="L262">            comptabiliteDaoUnderTest.getEcritureComptable(testEcritureComptable.getId());</span>
+<span class="nc" id="L263">        });</span>
+<span class="fc" id="L264">    }</span>
+
+    @ParameterizedTest
+    @CsvSource(&quot;DELETE FROM myerp.ligne_ecriture_comptable&quot; +
+            &quot;WHERE ecriture_id = :ecriture_id&quot;)
+    void setSQLdeleteListLigneEcritureComptable(String pSQLdeleteListLigneEcritureComptable) {
+<span class="fc" id="L270">        String test = pSQLdeleteListLigneEcritureComptable;</span>
+<span class="fc" id="L271">        assertThat(test).isEqualTo(&quot;DELETE FROM myerp.ligne_ecriture_comptable&quot; +</span>
+        &quot;WHERE ecriture_id = :ecriture_id&quot;);
+<span class="fc" id="L273">    }</span>
+
+    @Test
+    @Order(7)
+    void deleteListLigneEcritureComptable() {
+<span class="fc" id="L278">        comptabiliteDaoUnderTest.deleteEcritureComptable(testEcritureComptable.getId());</span>
+<span class="fc" id="L279">        comptabiliteDaoUnderTest.deleteListLigneEcritureComptable(testLigneEcritureComptable.getId());</span>
+<span class="fc" id="L280">        assertThat(comptabiliteDaoUnderTest.getListLigneEcritureComptable(testLigneEcritureComptable.getId())).isEmpty();</span>
+<span class="fc" id="L281">    }</span>
+
+    @ParameterizedTest
+    @CsvSource(&quot;SELECT * FROM myerp.sequence_ecriture_comptable&quot;)
+    void setSQLgetListSequenceEcritureComptable(String pSQLgetListSequenceEcritureComptable) {
+<span class="fc" id="L286">        String test = pSQLgetListSequenceEcritureComptable;</span>
+<span class="fc" id="L287">        assertThat(test).isEqualTo(&quot;SELECT * FROM myerp.sequence_ecriture_comptable&quot;);</span>
+<span class="fc" id="L288">    }</span>
+
+    @Test
+    void getListSequenceEcritureComptable() {
+<span class="fc" id="L292">        assertThat(comptabiliteDaoUnderTest.getListSequenceEcritureComptable()).isNotEmpty();</span>
+<span class="fc" id="L293">    }</span>
+
+    @ParameterizedTest
+    @CsvSource(&quot;UPDATE myerp.sequence_ecriture_comptable&quot; +
+            &quot;SET derniere_valeur = :derniere_valeur&quot; +
+            &quot;WHERE&quot; +
+            &quot;id = :id&quot;)
+    void setSQLupdateSequenceEcritureComptable(String pSQLupdateSequenceEcritureComptable) {
+<span class="fc" id="L301">        String test = pSQLupdateSequenceEcritureComptable;</span>
+<span class="fc" id="L302">        assertThat(test).isEqualTo(&quot;UPDATE myerp.sequence_ecriture_comptable&quot; +</span>
+                                &quot;SET derniere_valeur = :derniere_valeur&quot; +
+                                &quot;WHERE&quot; +
+                                &quot;id = :id&quot;);
+<span class="fc" id="L306">    }</span>
+
+    @ParameterizedTest
+    @ValueSource(strings = &quot;INSERT INTO myerp.sequence_ecriture_comptable (&quot; +
+            &quot;journal_code, annee, derniere_valeur&quot; +
+            &quot;) VALUES (&quot; +
+            &quot;:journal_code, :annee, :derniere_valeur&quot; +
+            &quot;)&quot;)
+    void setSQLinsertSequenceEcritureComptable(String pSQLinsertSequenceEcritureComptable) {
+<span class="fc" id="L315">        String test = pSQLinsertSequenceEcritureComptable;</span>
+<span class="fc" id="L316">        assertThat(test).isEqualTo(&quot;INSERT INTO myerp.sequence_ecriture_comptable (&quot; +</span>
+                                    &quot;journal_code, annee, derniere_valeur&quot; +
+                                    &quot;) VALUES (&quot; +
+                                    &quot;:journal_code, :annee, :derniere_valeur&quot; +
+                                    &quot;)&quot;);
+<span class="fc" id="L321">    }</span>
+
+    @ParameterizedTest
+    @CsvSource(&quot;SELECT max(derniere_valeur) FROM MYERP.sequence_ecriture_comptable where YEAR(annee) = :annee;&quot;)
+    void setSQLgetLastFromSpecificYearSequenceEcritureComptable(String pSQLgetLastFromSpecificYearSequenceEcritureComptable) {
+<span class="fc" id="L326">        String test = pSQLgetLastFromSpecificYearSequenceEcritureComptable;</span>
+<span class="fc" id="L327">        assertThat(test).isEqualTo(&quot;SELECT max(derniere_valeur) FROM MYERP.sequence_ecriture_comptable where YEAR(annee) = :annee;&quot;);</span>
+<span class="fc" id="L328">    }</span>
+
+    @Test
+    void getLastFromSpecificYearSequenceEcritureComptable() {
+<span class="fc" id="L332">        assertThat(comptabiliteDaoUnderTest.getLastFromSpecificYearSequenceEcritureComptable(2016)).isNotNull();</span>
+<span class="fc" id="L333">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

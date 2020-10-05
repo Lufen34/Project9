@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EcritureComptableTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">myerp$All_in_myerp.exec</a> &gt; <a href="index.source.html" class="el_package">com.dummy.myerp.model.bean.comptabilite</a> &gt; <span class="el_source">EcritureComptableTest.java</span></div><h1>EcritureComptableTest.java</h1><pre class="source lang-java linenums">package com.dummy.myerp.model.bean.comptabilite;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+import com.dummy.myerp.model.exceptions.EmptyStringException;
+import com.dummy.myerp.model.exceptions.StringSizeTooBigException;
+import com.dummy.myerp.technical.exception.FunctionalException;
+import org.apache.commons.lang3.ObjectUtils;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+<span class="fc" id="L21"> class EcritureComptableTest {</span>
+    private EcritureComptable vEcriture;
+
+    @BeforeEach
+    public void initTests() {
+<span class="fc" id="L26">        Calendar calendar = Calendar.getInstance();</span>
+<span class="fc" id="L27">        calendar.set(1996, 1, 1);</span>
+
+<span class="fc" id="L29">        Date dateTest = calendar.getTime();</span>
+
+        try {
+<span class="fc" id="L32">            vEcriture = new EcritureComptable.Builder()</span>
+<span class="fc" id="L33">                    .Id(123)</span>
+<span class="fc" id="L34">                    .date(dateTest)</span>
+<span class="fc" id="L35">                    .journal(new JournalComptable(&quot;AC&quot;, &quot;test&quot;))</span>
+<span class="fc" id="L36">                    .build();</span>
+<span class="nc" id="L37">        } catch (StringSizeTooBigException | FunctionalException | EmptyStringException e) {</span>
+<span class="nc" id="L38">            e.printStackTrace();</span>
+<span class="fc" id="L39">        }</span>
+<span class="fc" id="L40">    }</span>
+
+   @AfterEach
+    public void unrefTests() {
+<span class="fc" id="L44">        vEcriture = null;</span>
+<span class="fc" id="L45">    }</span>
+
+    private LigneEcritureComptable createLigne(Integer pCompteComptableNumero, String pDebit, String pCredit) {
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        BigDecimal vDebit = pDebit == null ? null : new BigDecimal(pDebit);</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        BigDecimal vCredit = pCredit == null ? null : new BigDecimal(pCredit);</span>
+<span class="fc" id="L50">        String vLibelle = ObjectUtils.defaultIfNull(vDebit, BigDecimal.ZERO)</span>
+<span class="fc" id="L51">                                     .subtract(ObjectUtils.defaultIfNull(vCredit, BigDecimal.ZERO)).toPlainString();</span>
+<span class="fc" id="L52">        LigneEcritureComptable vRetour = new LigneEcritureComptable(new CompteComptable(pCompteComptableNumero),</span>
+                                                                    vLibelle,
+                                                                    vDebit, vCredit);
+<span class="fc" id="L55">        return vRetour;</span>
+    }
+
+
+    @Test
+     void isEquilibree() {
+<span class="fc" id="L61">        System.out.println(vEcriture.getListLigneEcriture().isEmpty());</span>
+<span class="fc" id="L62">        vEcriture.setLibelle(&quot;Equilibrée&quot;);</span>
+<span class="fc" id="L63">        vEcriture.getListLigneEcriture().add(this.createLigne(1, &quot;200.50&quot;, null));</span>
+<span class="fc" id="L64">        vEcriture.getListLigneEcriture().add(this.createLigne(1, &quot;100.50&quot;, &quot;33&quot;));</span>
+<span class="fc" id="L65">        vEcriture.getListLigneEcriture().add(this.createLigne(2, null, &quot;301&quot;));</span>
+<span class="fc" id="L66">        vEcriture.getListLigneEcriture().add(this.createLigne(2, &quot;40&quot;, &quot;7&quot;));</span>
+<span class="fc" id="L67">        assertThat(vEcriture.isEquilibree()).isTrue();</span>
+<span class="fc" id="L68">    }</span>
+
+    @Test
+     void isNotEquilibree() {
+<span class="fc" id="L72">        System.out.println(vEcriture.getListLigneEcriture().isEmpty());</span>
+<span class="fc" id="L73">        vEcriture.setLibelle(&quot;Non équilibrée&quot;);</span>
+<span class="fc" id="L74">        vEcriture.getListLigneEcriture().add(this.createLigne(1, &quot;10&quot;, null));</span>
+<span class="fc" id="L75">        vEcriture.getListLigneEcriture().add(this.createLigne(1, &quot;20&quot;, &quot;1&quot;));</span>
+<span class="fc" id="L76">        vEcriture.getListLigneEcriture().add(this.createLigne(2, null, &quot;30&quot;));</span>
+<span class="fc" id="L77">        vEcriture.getListLigneEcriture().add(this.createLigne(2, &quot;1&quot;, &quot;2&quot;));</span>
+<span class="fc" id="L78">        assertThat(vEcriture.isEquilibree()).isFalse();</span>
+<span class="fc" id="L79">    }</span>
+
+    @Test
+    void getId() {
+<span class="fc" id="L83">        vEcriture.setId(1);</span>
+<span class="fc" id="L84">        assertThat(vEcriture.getId()).isEqualTo(1);</span>
+<span class="fc" id="L85">    }</span>
+
+
+    @ParameterizedTest(name = &quot;Id equals : {0}&quot;)
+    @ValueSource(ints = { 1, 4, 6, 3})
+    void setId(Integer pId) {
+<span class="fc" id="L91">        vEcriture.setId(pId);</span>
+<span class="fc" id="L92">        assertThat(vEcriture.getId()).isEqualTo(pId);</span>
+<span class="fc" id="L93">    }</span>
+
+    @Test
+    void getJournal() {
+<span class="fc" id="L97">        JournalComptable j = new JournalComptable();</span>
+<span class="fc" id="L98">        JournalComptable k = new JournalComptable();</span>
+<span class="fc" id="L99">        vEcriture.setJournal(j);</span>
+<span class="fc" id="L100">        assertThat(vEcriture.getJournal()).isEqualTo(j);</span>
+<span class="fc" id="L101">        vEcriture.setJournal(k);</span>
+<span class="fc" id="L102">        assertThat(vEcriture.getJournal()).isEqualTo(k);</span>
+<span class="fc" id="L103">    }</span>
+
+    @Test
+    void setJournal() {
+<span class="fc" id="L107">        JournalComptable j = new JournalComptable();</span>
+<span class="fc" id="L108">        JournalComptable k = new JournalComptable();</span>
+<span class="fc" id="L109">        vEcriture.setJournal(j);</span>
+<span class="fc" id="L110">        assertThat(vEcriture.getJournal()).isEqualTo(j);</span>
+<span class="fc" id="L111">        vEcriture.setJournal(k);</span>
+<span class="fc" id="L112">        assertThat(vEcriture.getJournal()).isEqualTo(k);</span>
+<span class="fc" id="L113">    }</span>
+
+    @Test
+    void getReference() {
+<span class="fc" id="L117">        assertThat(vEcriture.getReference()).isEqualTo(&quot;AC-1996/00123&quot;);</span>
+<span class="fc" id="L118">    }</span>
+
+    @Test
+    void getDate() {
+<span class="fc" id="L122">        Date date = new Date();</span>
+<span class="fc" id="L123">        vEcriture.setDate(date);</span>
+<span class="fc" id="L124">        assertThat(vEcriture.getDate()).isEqualTo(date);</span>
+<span class="fc" id="L125">    }</span>
+
+    @Test
+    void setDate() {
+<span class="fc" id="L129">        Date date = new Date();</span>
+<span class="fc" id="L130">        vEcriture.setDate(date);</span>
+<span class="fc" id="L131">        assertThat(vEcriture.getDate()).isEqualTo(date);</span>
+<span class="fc" id="L132">    }</span>
+
+    @Test
+    void getLibelle() {
+<span class="fc" id="L136">        vEcriture.setLibelle(&quot;test&quot;);</span>
+<span class="fc" id="L137">        assertThat(vEcriture.getLibelle()).isEqualTo(&quot;test&quot;);</span>
+<span class="fc" id="L138">    }</span>
+
+    @Test
+    void setLibelle() {
+<span class="fc" id="L142">        vEcriture.setLibelle(&quot;test&quot;);</span>
+<span class="fc" id="L143">        assertThat(vEcriture.getLibelle()).isEqualTo(&quot;test&quot;);</span>
+<span class="fc" id="L144">    }</span>
+
+    @Test
+    void getListLigneEcriture() {
+<span class="fc" id="L148">        List&lt;LigneEcritureComptable&gt; data = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L149">        data.add(this.createLigne(1, &quot;200.50&quot;, null));</span>
+<span class="fc" id="L150">        data.add(this.createLigne(1, &quot;100.50&quot;, &quot;33&quot;));</span>
+<span class="fc" id="L151">        data.add(this.createLigne(2, null, &quot;301&quot;));</span>
+<span class="fc" id="L152">        data.add(this.createLigne(2, &quot;40&quot;, &quot;7&quot;));</span>
+
+<span class="fc" id="L154">        vEcriture.getListLigneEcriture().add(this.createLigne(1, &quot;200.50&quot;, null));</span>
+<span class="fc" id="L155">        vEcriture.getListLigneEcriture().add(this.createLigne(1, &quot;100.50&quot;, &quot;33&quot;));</span>
+<span class="fc" id="L156">        vEcriture.getListLigneEcriture().add(this.createLigne(2, null, &quot;301&quot;));</span>
+<span class="fc" id="L157">        vEcriture.getListLigneEcriture().add(this.createLigne(2, &quot;40&quot;, &quot;7&quot;));</span>
+
+<span class="fc" id="L159">        assertThat(vEcriture.getListLigneEcriture().toString()).hasToString(data.toString());</span>
+<span class="fc" id="L160">    }</span>
+
+    @Test
+    void getTotalDebit() {
+<span class="fc" id="L164">        vEcriture.getListLigneEcriture().add(this.createLigne(1, &quot;200&quot;, null));</span>
+<span class="fc" id="L165">        vEcriture.getListLigneEcriture().add(this.createLigne(1, &quot;400&quot;, null));</span>
+<span class="fc" id="L166">        vEcriture.getListLigneEcriture().add(this.createLigne(1, &quot;100&quot;, null));</span>
+<span class="fc" id="L167">        assertThat(vEcriture.getTotalDebit()).isEqualTo(new BigDecimal(700));</span>
+<span class="fc" id="L168">    }</span>
+
+    @Test
+    void getTotalCredit() {
+<span class="fc" id="L172">        vEcriture.getListLigneEcriture().add(this.createLigne(1, null, &quot;200&quot;));</span>
+<span class="fc" id="L173">        vEcriture.getListLigneEcriture().add(this.createLigne(1, null, &quot;400&quot;));</span>
+<span class="fc" id="L174">        vEcriture.getListLigneEcriture().add(this.createLigne(1, null, &quot;100&quot;));</span>
+<span class="fc" id="L175">        assertThat(vEcriture.getTotalCredit()).isEqualTo(new BigDecimal(700));</span>
+<span class="fc" id="L176">    }</span>
+
+    @Test
+    void setReference() {
+<span class="fc" id="L180">        vEcriture.setReference(&quot;AC&quot;, &quot;test&quot;, new Date(), 3);</span>
+<span class="fc" id="L181">        assertThat(vEcriture.getReference()).isEqualTo(&quot;AC-2020/00003&quot;);</span>
+<span class="fc" id="L182">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
