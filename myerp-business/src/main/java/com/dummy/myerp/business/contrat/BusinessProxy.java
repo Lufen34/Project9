@@ -10,6 +10,7 @@ public interface BusinessProxy {
 
     // ==================== Managers ====================
 
+    //TODO Test pour travis CI
     /**
      * Renvoie le manager du package Comptabilite.
      *
